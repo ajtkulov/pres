@@ -1,0 +1,225 @@
+\documentclass{beamer}
+
+\usepackage[russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[cp1251]{inputenc}
+% \usepackage[utf8]{inputenc}
+
+\usepackage{tikz}
+
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,height=6cm,compat=1.3}
+
+\usepgflibrary{arrows}
+
+
+\usetheme{Madrid}
+
+\newcommand*{\sele}[1]{{\bf #1}}
+\newcommand*{\sel}[1]{\textcolor{blue}{#1}}
+\newcommand*{\prob}[1]{\textcolor{magenta}{#1}}
+\newcommand*{\vs}[0]{\vspace{10pt}}
+\newcommand<>{\fullsizegraphic}[1]{
+%  \begin{textblock*}{0cm}(-1cm,-3.78cm)
+  \includegraphics[width={\paperwidth}]{#1}
+%  \end{textblock*}
+}
+
+\title[Вероятностные структуры данных]{Кое-что о вероятностных структурах данных}
+\author{Pavel Ajtkulov}
+\institute[]{piano.io}
+\date{6-7 ноября 2019 г.}
+
+\begin{document}
+
+\frame{\titlepage}
+
+
+
+\frame
+{
+\frametitle{Обо мне}
+
+}
+
+
+\frame
+{
+\frametitle{Чего не будет в этом докладе}
+
+
+\begin{itemize}
+  \item TCS
+  \item skip list
+  \item treap
+  \item Monte Carlo
+  \item Local sensevity hashing
+  \item etc.
+\end{itemize}
+
+
+%      \begin{figure}
+        % From https://i.imgur.com/AyzVOIO.jpg
+%        \includegraphics[height=0.3\textwidth]{mins}
+ %       \caption{here's the image!}
+  %    \end{figure}
+}
+
+\frame
+{
+\frametitle{Что будет в этом докладе}
+
+
+Вероятностные структуры данных, которые позволяют экономить память.
+
+Данных много. 
+
+Храним мало, либо очень мало. 
+
+Очень ограниченные задачи. 
+
+Шаг вправо, шаг влево - попытка к бегству! Стреляем без предупреждения!
+}
+
+
+
+
+\frame
+{
+\frametitle{Предупреждение}
+
+Надежность - это когда вашу программу ставят на военную технику, а вы спите спокойно (с) Н. Н. Непейвода.
+
+TODO: картинка про курение. Kill Bill 2
+
+Примечение: если вы в сфере финансов или от вашего кода зависит человеческая жизнь - одумайтесь.
+
+}
+
+
+\frame
+{
+\frametitle{HyperLogLog}
+
+Задача: 
+
+\vspace{5mm}
+
+\colorbox{gray!30}{select count(distinct(field)) from table}
+
+\vspace{5mm}
+
+От 10M, лучше от 100M. Eще больше. Значительно.
+
+Иначе можно решаеть классическими способами.
+}
+
+
+
+\frame
+{
+\frametitle{HyperLogLog, идеальный мир}
+
+Рассмотрим минимальный hash.
+
+obj1, obj2, obj3, obj4, \ldots
+
+0.672, 0.368, 0.864, 0.782, \ldots
+
+Встретить 0.368 "более вероятно" чем 0.000001 (на 5-10 элементах).
+}
+
+
+
+\begin{frame}[fragile]
+\frametitle{HyperLogLog}
+
+Применим "шардинг" (простой roundRobin), будем считать min-hash для каждого подпотока.
+
+  \begin{verbatim}
+          a1, aN+1, ...         minHash
+stream -> a2                    minHash
+          ...                   ...
+          aN                    minHash
+
+  \end{verbatim}
+
+
+\end{frame}
+
+\begin{frame}[plain]
+
+      \begin{figure}
+        \includegraphics[height=0.8\textwidth]{hll_paper.png}
+      \end{figure}
+\end{frame}
+
+
+
+\frame
+{
+\frametitle{HyperLogLog, random facts}
+
+В кишках реализации используется количество 0 в префиксе hash-а. Log.
+$$0.000001010111 \mapsto 5$$
+
+Плюс набор предрасчитанных магических констант.
+
+Где используется: 
+во многих базах данных($redis, redshift, google bigquery$).
+
+\colorbox{gray!30}{$select approx\_count(distinct(field)) from table$}
+
+The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a typical accuracy (standard error) of $2\%$, using 1.5 kB of memory. (original paper, wiki)
+
+TODO: картинка с числами по памяти
+
+Распределенный подсчет HyperLogLog. 
+
+}
+
+\frame
+{
+\frametitle{HyperLogLog, use case}
+
+
+Нужно ли где-то в простой жизни? 
+
+Сетевое оборудование, считать количество уникальных src/dest соединений. 
+Малое количество памяти, большое число объектов. 
+Определение DDOS, "нечисти".
+
+Запускать новый HLL, каждые 5 минут, TTL = 30 минут. 
+Мониторить, если текущие значения отличаются от средних.
+
+}
+
+
+\frame
+{
+\frametitle{HyperLogLog, история}
+
+LogLog -> HyperLogLog -> HyperLogLog+ (на 64-битах, уточнили набор магических констант)
+
+Порядка 10 схожих алгоритмов/структур данных/вариаций.
+}
+
+\frame
+{
+\frametitle{Bloom filter}
+
+LogLog -> HyperLogLog -> HyperLogLog+ (на 64-битах, уточнили набор магических констант)
+
+Порядка 10 схожих алгоритмов/структур данных/вариаций.
+}
+
+
+
+
+
+
+
+
+\end{document}
