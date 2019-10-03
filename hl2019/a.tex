@@ -257,6 +257,11 @@ LogLog -> HyperLogLog -> HyperLogLog+ (на 64-битах, уточнили набор магических ко
 
 Сделать несколько $k$ hash-functions на bitset размера $m$ при вставке $n$ объектов.
 
+      \begin{figure}
+        \includegraphics[height=0.3\textwidth]{bloom.png}
+      \end{figure}
+
+
 Один объект высталяет не один бит, а $k$ битов. 
 Для проверки вхождения нужно проверить $k$ битов. Даже если все биты установлены, то это не гарантирует наличие объекта (false positive).
 
@@ -432,6 +437,75 @@ TODO: compressed bloom filter
 
 
 }
+
+\frame
+{
+\frametitle{Count min sketch}
+
+
+      \begin{figure}
+        \includegraphics[height=0.3\textwidth]{mins.png}
+      \end{figure}
+
+\pause
+
+$$query = min_{i \in 1 \ldots k}(t_i(h_i))$$
+
+
+
+}
+
+\frame
+{
+\frametitle{Count min sketch}
+
+Проблема перекоса данных, когда все ячейки в матрицы > 0.
+
+Merge двух
+
+Поэлементно сложить внутренний массив.
+}
+
+
+
+
+
+
+
+
+\frame
+{
+\frametitle{Desing, likes}
+
+Пользователей - $10^9$, объектов - $10^9$. 
+
+Всегда работает грубая сила "мы купили кластер на $100 - 1 K - 10 K$ нод и храним все".
+
+Лайк - $(user_id, object_id)$. 
+
+Да, bloomFilter на факт лайка/дизлайка. 
+
+Количество лайков - классический KV, либо $Count-min-sketch(object_id)$.
+
+Шардинг по $object_id, (user_id, object_id)$
+
+Кто из друзей так же лайкал? Пробежаться по списку друзей, спросить bloomFilter.
+Естественный граф ($natural\ graph$), особенности.
+
+Отложенный лайк, если пользователь быстро передумал.
+}
+
+
+\frame
+{
+\frametitle{Desing, views}
+
+
+
+}
+
+
+
 
 
 
