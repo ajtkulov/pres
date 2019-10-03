@@ -4,8 +4,8 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage[cp1251]{inputenc}
-% \usepackage[utf8]{inputenc}
+%\usepackage[cp1251]{inputenc}
+%\usepackage[utf8]{inputenc}
 
 \usepackage{tikz}
 
@@ -42,6 +42,15 @@
 {
 \frametitle{Обо мне}
 
+\begin{itemize}
+  \item data engineer
+  \item scala, fp, reasonable fp
+  \item спортивное ЧГК (Puzzle, top 200-250)
+  \item шахматы (Elo = 1950..2000)
+  \item бег (марафон: 3h 57m, $\frac{1}{2}$ марафон: 1h 43m, 10k: 45m 40s)
+\end{itemize}
+
+
 }
 
 
@@ -60,11 +69,6 @@
 \end{itemize}
 
 
-%      \begin{figure}
-        % From https://i.imgur.com/AyzVOIO.jpg
-%        \includegraphics[height=0.3\textwidth]{mins}
- %       \caption{here's the image!}
-  %    \end{figure}
 }
 
 \frame
@@ -174,11 +178,19 @@ $$0.000001010111 \mapsto 5$$
 
 The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a typical accuracy (standard error) of $2\%$, using 1.5 kB of memory. (original paper, wiki)
 
-TODO: картинка с числами по памяти
-
 Распределенный подсчет HyperLogLog. 
 
 }
+
+\frame
+{
+\frametitle{HyperLogLog, stats}
+      \begin{figure}
+        \includegraphics[height=0.6\textwidth]{hll_stats.png}
+      \end{figure}
+
+}
+
 
 \frame
 {
@@ -226,12 +238,14 @@ LogLog -> HyperLogLog -> HyperLogLog+ (на 64-битах, уточнили набор магических ко
 
 есть hashTable с 10 слотами, куда мы вставляем 3 объекта. С какой вероятностью будут коллизий?
 
+TODO: картинка?
+
 30-60 секунд на размышление... 
 
 \pause
 
 Итого:
-1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28
+$$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
 
 Да, это та же задача что и в парадоксе дней рождения. 
 
