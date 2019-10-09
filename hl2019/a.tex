@@ -119,9 +119,15 @@
 {
 \frametitle{HyperLogLog}
 
-Задача: 
+\begin{center}
+HyperLogLog
+\end{center}
+}
 
-\vspace{5mm}
+\frame
+{
+\frametitle{Задача}
+
 
 \colorbox{gray!30}{select count(distinct(field)) from table}
 
@@ -136,7 +142,7 @@
 
 \frame
 {
-\frametitle{HyperLogLog, идеальный мир}
+\frametitle{Идеальный мир}
 
 Рассмотрим минимальный hash.
 
@@ -157,7 +163,7 @@
 
 
 \begin{frame}[fragile]
-\frametitle{HyperLogLog}
+\frametitle{Внутренности}
 
 Применим "шардинг" (простой roundRobin), будем считать min-hash для каждого подпотока.
 
@@ -169,6 +175,9 @@ stream -> a2                    minHash
 
   \end{verbatim}
 
+\pause
+
+Internal Representation: Array[Int]
 
 \end{frame}
 
@@ -191,7 +200,7 @@ stream -> a2                    minHash
 
 \frame
 {
-\frametitle{HyperLogLog, random facts}
+\frametitle{Random facts}
 
 Не BTC, но тоже нули. Log. LogLog.
 $$0.000001010111 \mapsto 5$$
@@ -217,9 +226,9 @@ The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a t
 
 \frame
 {
-\frametitle{HyperLogLog, stats}
+\frametitle{Stats}
       \begin{figure}
-        \includegraphics[height=0.6\textwidth]{hll_stats.png}
+        \includegraphics[height=0.475\textwidth]{hll_stats.png}
       \end{figure}
 
 }
@@ -227,7 +236,7 @@ The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a t
 
 \begin{frame}[fragile]
 
-\frametitle{Нужно ли где-то в простой жизни}
+\frametitle{Нужно ли где-то в простой жизни?}
 
 Сетевое оборудование, считать количество уникальных src/dest соединений. 
 Малое количество памяти, большое число объектов. 
@@ -249,6 +258,10 @@ The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a t
 
 \end{verbatim}
 }
+
+\pause
+
+Если вы работаете в FAANG, \ldots
 
 \end{frame}
 
