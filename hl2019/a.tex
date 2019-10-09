@@ -8,7 +8,8 @@
 % \usepackage[utf8]{inputenc}
 \usepackage{epigraph}
 \usepackage{tikz}
-
+\usepackage{xcolor}
+\usepackage{verbatimbox}
 \usepackage{pgfplots}
 \pgfplotsset{width=10cm,height=6cm,compat=1.3}
 
@@ -45,7 +46,7 @@
 \begin{itemize}
   \item data engineer
   \item scala, fp, reasonable fp
-  \item спортивное ЧГК (Puzzle, top 200-250)
+  \item спортивное ЧГК (Puzzle, top 250)
   \item шахматы (Elo = 1950..2000)
   \item бег (марафон: 3h 57m, $\frac{1}{2}$ марафон: 1h 43m, 10k: 45m 40s)
 \end{itemize}
@@ -85,6 +86,8 @@
 Очень ограниченные задачи. 
 
 Шаг вправо, шаг влево - попытка к бегству! Стреляем без предупреждения!
+
+Немного CS, базовая теория вероятности.
 }
 
 
@@ -104,7 +107,7 @@
 
 \frame
 {
-\frametitle{Содержит сцены курения}
+\frametitle{Главное - не терять голову}
 
       \begin{figure}
         \includegraphics[height=0.55\textwidth]{killbill.jpg}
@@ -137,9 +140,16 @@
 
 Рассмотрим минимальный hash.
 
-obj1, obj2, obj3, obj4, \ldots
+\vspace{5mm}
 
-0.672, 0.368, 0.864, 0.782, \ldots
+\colorbox{gray!30}{obj1, obj2, obj3, obj4, \ldots}
+
+\vspace{5mm}
+
+
+\colorbox{gray!30}{0.672, 0.368, 0.864, 0.782, \ldots}
+
+\vspace{5mm}
 
 Встретить 0.368 "более вероятно" чем 0.000001 (на 5-10 элементах).
 }
@@ -170,22 +180,36 @@ stream -> a2                    minHash
 \end{frame}
 
 
+\begin{frame}[plain]
+
+      \begin{figure}
+        \includegraphics[height=0.5\textwidth]{cocain.jpg}
+      \end{figure}
+\end{frame}
+
+
 
 \frame
 {
 \frametitle{HyperLogLog, random facts}
 
-В кишках реализации используется количество 0 в префиксе hash-а. Log.
+Не BTC, но тоже нули. Log. LogLog.
 $$0.000001010111 \mapsto 5$$
 
-Плюс набор предрасчитанных магических констант.
+Набор предрасчитанных магических констант.
 
 Где используется: 
-во многих базах данных($redis, redshift, google bigquery$).
+во многих базах данных($redis,\ redshift,\ google\ bigquery$).
 
-\colorbox{gray!30}{$select approx\_count(distinct(field)) from table$}
+\vspace{5mm}
+
+\colorbox{gray!30}{$select\ approx\_count(distinct(field))\ from\ table$}
+
+\vspace{5mm}
 
 The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a typical accuracy (standard error) of $2\%$, using 1.5 kB of memory. (original paper, wiki)
+
+\vspace{5mm}
 
 Распределенный подсчет HyperLogLog. 
 
@@ -201,31 +225,34 @@ The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a t
 }
 
 
-\frame
-{
-\frametitle{HyperLogLog, use case}
+\begin{frame}[fragile]
 
-
-Нужно ли где-то в простой жизни? 
+\frametitle{Нужно ли где-то в простой жизни}
 
 Сетевое оборудование, считать количество уникальных src/dest соединений. 
 Малое количество памяти, большое число объектов. 
 Определение DDOS, "нечисти".
 
-Запускать новый HLL, каждые 5 минут, TTL = 30 минут. 
-Мониторить, если текущие значения отличаются от средних.
+\pause
 
-}
+\begin{verbbox}
+  stream, stream, stream, stream, ...
+
+    
+    [ new HLL ]
+        [ new HLL ]
+            [ new HLL ]
 
 
-\frame
-{
-\frametitle{HyperLogLog, история}
+    -------------time>>
+    [  ]        -  5 min
+    [         ] - 30 min
 
-LogLog -> HyperLogLog -> HyperLogLog+ (на 64-битах, уточнили набор магических констант)
+\end{verbbox}
+\par\colorbox{lightgray!30}{\parbox{\textwidth}{\theverbbox}}\par
 
-Порядка 10 схожих алгоритмов/структур данных/вариаций.
-}
+
+\end{frame}
 
 \frame
 {
