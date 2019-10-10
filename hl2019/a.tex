@@ -79,13 +79,20 @@
 
 Вероятностные структуры данных, которые позволяют экономить память.
 
+\vspace{5mm}
+
+
 Данных много. 
 
 Храним мало, либо очень мало. 
 
+\vspace{5mm}
+
 Очень ограниченные задачи. 
 
 Шаг вправо, шаг влево - попытка к бегству! Стреляем без предупреждения!
+
+\vspace{5mm}
 
 Немного CS, базовая теория вероятности.
 }
@@ -120,7 +127,7 @@
 \frametitle{HyperLogLog}
 
 \begin{center}
-HyperLogLog
+{\huge HyperLogLog}
 \end{center}
 }
 
@@ -265,11 +272,22 @@ The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a t
 
 \end{frame}
 
+
 \frame
 {
 \frametitle{Bloom filter}
 
-Задача: 
+\begin{center}
+{\huge Bloom filter}
+\end{center}
+}
+
+
+\frame
+{
+\frametitle{Задача}
+
+На <<мобильный телефон>> поступает входящий звонок. 
 
 проверка вхождения элемента во множество
 
@@ -279,42 +297,91 @@ The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a t
 Если объектов немного, то можно использовать hashTable, tree, set, etc.
 }
 
-\frame
-{
-\frametitle{Bloom filter, mini}
+\begin{frame}[fragile]
+\frametitle{Разогрев}
 
-есть hashTable с 10 слотами, куда мы вставляем 3 объекта. С какой вероятностью будут коллизий?
-
-TODO: картинка?
-
-30-60 секунд на размышление... 
+Есть hashTable с 10 слотами, вставляем 3 объекта. С какой вероятностью будут коллизии?
 
 \pause
 
-Итого:
+\vspace{5mm}
+
+{\color{blue}
+\begin{verbatim}
+[ ] [ ] [*] [ ] [*] [ ] [*] [*] [ ] [ ]
+
+vs.
+
+[ ] [ ] [*] [ ] [*] [ ] [*] [ ] [ ] [ ]
+         *
+\end{verbatim}
+}
+
+\end{frame}
+
+\begin{frame}[plain]
+
+      \begin{figure}
+        \includegraphics[height=0.5\textwidth]{tick1.jpg}
+      \end{figure}
+\end{frame}
+
+\begin{frame}[plain]
+
+      \begin{figure}
+        \includegraphics[height=0.63\textwidth]{tick2.jpg}
+      \end{figure}
+\end{frame}
+
+
+\frame
+{
+\frametitle{Разогрев}
+
+Легко видеть что $\textsuperscript{\textcopyright}$:
+$$1$$
+
+\pause 
+
+$$1 * (9 / 10)$$
+
+\pause 
+
+$$1 * (9 / 10) * (8 / 10)$$
+
+\pause 
+
 $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
+
+
+
 
 Да, это та же задача что и в парадоксе дней рождения. 
 
 \pause
 
+\vspace{5mm}
+
 Лайфхак: функция растет как $sqrt(n)$. 
 
 Посчитать для int32, int64.
+
 }
 
 \frame
 {
-\frametitle{Bloom filter, perfect world}
+\frametitle{Идеальный мир}
 
 Коллизии отсутствуют и бесконечная память.
+
+\vspace{5mm}
 
 Тогда бы хранили битовый флаг на бесконечной ленте. 
 }
 
 \frame
 {
-\frametitle{Bloom filter, real world}
+\frametitle{Реальность}
 
 Сделать несколько $k$ hash-functions на bitset размера $m$ при вставке $n$ объектов.
 
