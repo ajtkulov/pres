@@ -287,14 +287,29 @@ The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a t
 {
 \frametitle{Задача}
 
-На <<мобильный телефон>> поступает входящий звонок. 
+На {\color{blue}<<мобильный телефон>>} поступает {\color{blue}<<входящий звонок>>}. Проверить, что {\color{blue}<<номера абонента>>} нет в {\color{blue}<<базе спаммеров>>}, без тяжелого запроса в {\color{blue}<<сторонние сервисы>>}.
 
-проверка вхождения элемента во множество
+\vspace{5mm}
 
-Рассматриваем урезанную задачу, только ответ да/нет.
+\pause
+
+{\color{blue} Абстракция: база данных/запрос/кэш/чтение с диска.}
+
+\vspace{5mm}
+
+\pause
+
+Только ответ да/нет.
+
+\vspace{5mm}
+
+\pause
+
 Задача перечисления, порядок добавления, возможность удаления сюда не входит.
 
-Если объектов немного, то можно использовать hashTable, tree, set, etc.
+\vspace{5mm}
+
+Если объектов немного, то классика.
 }
 
 \begin{frame}[fragile]
@@ -381,17 +396,99 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
 
 \frame
 {
-\frametitle{Реальность}
+\frametitle{Реальность, несколько хеш-функций}
 
-Сделать несколько $k$ hash-functions на bitset размера $m$ при вставке $n$ объектов.
+\begin{center}
+
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (360, 0);
+\draw[gray, thick] (0, 20) -- (360, 20);
+\foreach \x in {0,...,18}
+ \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
+\end{tikzpicture}
+
+
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (360, 0);
+\draw[gray, thick] (0, 20) -- (360, 20);
+\foreach \x in {0,...,18}
+ \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
+\node[blue] at (10,30) {$\{x\}$}; 
+\node[blue] at (30,10) {1}; 
+\node[blue] at (110,10) {1}; 
+\node[blue] at (270,10) {1}; 
+\end{tikzpicture}
+
+
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (360, 0);
+\draw[gray, thick] (0, 20) -- (360, 20);
+\foreach \x in {0,...,18}
+ \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
+\node[blue] at (10,30) {$\{x\}$}; 
+\node[red] at (30,30) {$\{y\}$}; 
+\node[blue] at (30,10) {1}; 
+\node[blue] at (110,10) {1}; 
+\node[blue] at (270,10) {1}; 
+\node[red] at (90,10) {1}; 
+\node[red] at (230,10) {1}; 
+\node[red] at (330,10) {1}; 
+
+\end{tikzpicture}
+
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (360, 0);
+\draw[gray, thick] (0, 20) -- (360, 20);
+\foreach \x in {0,...,18}
+ \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
+\node[blue] at (10,30) {$\{x\}$}; 
+\node[red] at (30,30) {$\{y\}$}; 
+\node[violet] at (50,30) {$\{z\}$}; 
+\node[blue] at (30,10) {1}; 
+\node[blue] at (110,10) {1}; 
+\node[blue] at (270,10) {1}; 
+\node[red] at (90,10) {1}; 
+\node[red] at (230,10) {1}; 
+\node[red] at (330,10) {1}; 
+\node[violet] at (70,10) {1}; 
+\node[violet] at (110,10) {1}; 
+\node[violet] at (230,10) {1}; 
+
+\end{tikzpicture}
+
+
+
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (360, 0);
+\draw[gray, thick] (0, 20) -- (360, 20);
+\foreach \x in {0,...,18}
+ \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
+\node at (10,30) {$\{x\}$}; 
+\node at (30,30) {$\{y\}$}; 
+\node at (50,30) {$\{z\}$}; 
+\node at (30,10) {1}; 
+\node at (110,10) {1}; 
+\node at (270,10) {1}; 
+\node at (90,10) {1}; 
+\node at (230,10) {1}; 
+\node at (330,10) {1}; 
+\node at (70,10) {1}; 
+\node at (110,10) {1}; 
+\node at (230,10) {1}; 
+
+\end{tikzpicture}
+
+
+\end{center}
 
       \begin{figure}
         \includegraphics[height=0.3\textwidth]{bloom.png}
       \end{figure}
 
 
-Один объект высталяет не один бит, а $k$ битов. 
-Для проверки вхождения нужно проверить $k$ битов. Даже если все биты установлены, то это не гарантирует наличие объекта (false positive).
+Проверка. False Positive.
+
+Нельзя удалять.
 
 Confusion matrix.
 }
@@ -399,35 +496,45 @@ Confusion matrix.
 \begin{frame}[plain]
 
       \begin{figure}
-        \includegraphics[height=0.8\textwidth]{bloom_wiki.png}
+        \includegraphics[height=0.65\textwidth]{bloom_wiki.png}
       \end{figure}
 \end{frame}
 
 
 \frame
 {
-\frametitle{Bloom filter}
+\frametitle{Посчитаем}
 
-Посчитаем.
-
-Оказывается, что все не так плохо. На каждые $10^{-3}$ ошибки требуется примерно 10 бит (бит, не байтов!).
+Оказывается, не все так плохо. На каждые $10^{-3}$ ошибки требуется примерно 10 бит (бит, не байтов!).
 То есть на $10^{-6}$ - 20 бит (2.5 байта), $10^{-9}$ - 30 бит (3.75 байта, все еще меньше одного указателя), и так далее.
 Объекты - довольно жирные.
 
+\vspace{5mm}
+
 Внутри это всего лишь bitset. Нет никакого memory footprint.
 
+\vspace{5mm}
+
 То есть на 100M объектов с ошибкой $10^{-6}$ требуется 250Мб памяти.
+
+\vspace{5mm}
 
 "Минусы": исходная постановка урезана, нет "честной" возможности удалять, перечислять объекты.
 }
 
 \frame
 {
-\frametitle{Bloom filter}
+\frametitle{Честность и относительность}
 
-Честность - относительна.
 
-Удалять - завести второй bloomFilter, для удаленных. Делать 2 запроса. Нельзя "честно" удалить, а потом снова добавить.
+Удалять - завести второй bloomFilter, для удаленных. Делать 2 запроса. 
+
+\vspace{5mm}
+
+Нельзя "честно" удалить, а потом снова добавить.
+
+\vspace{5mm}
+
 Можно... Вы поняли идею
 }
 
