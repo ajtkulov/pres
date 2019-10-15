@@ -30,7 +30,7 @@
 
 \title[Вероятностные структуры данных]{Кое-что о вероятностных структурах данных}
 \author{Pavel Ajtkulov}
-\institute[]{piano.io}
+\institute[]{ajtkulov@gmail.com, piano.io}
 \date{6-7 ноября 2019 г.}
 
 \begin{document}
@@ -399,15 +399,16 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
 \frametitle{Реальность, несколько хеш-функций}
 
 \begin{center}
-
+\onslide<1, 2>
 \begin{tikzpicture}[scale=0.036]
 \draw[gray, thick] (0, 0) -- (360, 0);
+\node[gray] at (10,30) {$\{\}$}; 
 \draw[gray, thick] (0, 20) -- (360, 20);
 \foreach \x in {0,...,18}
  \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
 \end{tikzpicture}
 
-
+\onslide<2, 3>
 \begin{tikzpicture}[scale=0.036]
 \draw[gray, thick] (0, 0) -- (360, 0);
 \draw[gray, thick] (0, 20) -- (360, 20);
@@ -419,7 +420,7 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
 \node[blue] at (270,10) {1}; 
 \end{tikzpicture}
 
-
+\onslide<3, 4>
 \begin{tikzpicture}[scale=0.036]
 \draw[gray, thick] (0, 0) -- (360, 0);
 \draw[gray, thick] (0, 20) -- (360, 20);
@@ -436,6 +437,7 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
 
 \end{tikzpicture}
 
+\onslide<4, 5>
 \begin{tikzpicture}[scale=0.036]
 \draw[gray, thick] (0, 0) -- (360, 0);
 \draw[gray, thick] (0, 20) -- (360, 20);
@@ -457,7 +459,7 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
 \end{tikzpicture}
 
 
-
+\onslide<5>
 \begin{tikzpicture}[scale=0.036]
 \draw[gray, thick] (0, 0) -- (360, 0);
 \draw[gray, thick] (0, 20) -- (360, 20);
@@ -478,8 +480,14 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
 
 \end{tikzpicture}
 
-
 \end{center}
+
+}
+
+\frame
+{
+\frametitle{Реальность, несколько хеш-функций}
+
 
       \begin{figure}
         \includegraphics[height=0.3\textwidth]{bloom.png}
@@ -792,6 +800,10 @@ Quotient filter (a bit stronger than Bloom filter)
 \vspace{5mm}
 
 $!?$
+
+\vspace{5mm}
+
+Можете задавать любые вопросы, но отвечу я вероятностно.
 
 \vspace{5mm}
 
