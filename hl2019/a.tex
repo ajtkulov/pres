@@ -494,12 +494,37 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
       \end{figure}
 
 
-Проверка. False Positive.
+Проверка.  Только False Positive.
 
 Нельзя удалять.
 
 Confusion matrix.
 }
+
+\begin{frame}[fragile]
+\frametitle{Confusion matrix}
+
+\begin{verbatim}
+*---------------*---------------*         
+| TruePositive  | FalsePositive |             140 |   113
+*---------------*---------------*            -----*------- 
+| FalseNegative | TrueNegative  |               8 | 21414
+*---------------*---------------*
+
+
+157414 |       7
+-------*---------
+     0 | 6837254
+
+error = 10^{-6}
+
+\end{verbatim}
+
+
+
+
+
+\end{frame}
 
 \begin{frame}[plain]
 
@@ -549,30 +574,37 @@ Confusion matrix.
 
 \frame
 {
-\frametitle{Bloom filter}
+\frametitle{Combine}
 
-$$bloom_1 + bloom_2 = bit_or (bloom_1.internal_bitset, bloom_2.internal_bitset)$$
+$$bloom_1 + bloom_2 = bitOr (bloom_1.bitset, bloom_2.bitset)$$
 
-$$bloom_1 * bloom_2 = bit_and (bloom_1.internal_bitset, bloom_2.internal_bitset)$$
+$$bloom_1 * bloom_2 = bitAnd (bloom_1.bitset, bloom_2.bitset)$$
 
 Spark example. 
-$$Partition.map(x => Bloom()).reduce(\_ + \_)$$
-$$Partition.map(x => Bloom()).reduce((x, y) => x + y)$$
+
+$$Partition.map(x => Bloom(\ldots)).reduce(\_ + \_)$$
+$$Partition.map(x => Bloom(\ldots)).reduce((x, y) => x + y)$$
 
 Обратная задача. По bloomFilter понять сколько там элементов. 
 
-См wiki.
-
-Конструктор: (сколько будет уникальных элементов, ошибка)
+Конструктор: (количество уникальных элементов, ошибка)
 
 }
-
 
 \frame
 {
 \frametitle{Bloom filter, use cases}
 
-Key-value storage.
+\begin{center}
+{\huge Bloom filter, use cases}
+\end{center}
+}
+
+
+\frame
+{
+\frametitle{Key-value storage}
+
 
 Если кардинальность значений не велика $(k \le 10)$, то можно хранить $k$ bloom filter-ов. 
 Спросить каждый. Учитывать, что ошибка меняется (* k).
@@ -582,7 +614,7 @@ Key-value storage.
 
 \frame
 {
-\frametitle{Bloom filter, use cases}
+\frametitle{Key-value storage}
 
 Если кардинальность значений велика $(k > 10)$, то можно хранить $k$ bloom filter-ов.
 Организовать дерево на них. 
@@ -605,17 +637,23 @@ Key-value storage.
 
 \frame
 {
-\frametitle{Bloom filter, use cases}
+\frametitle{Телефонная база спамеров}
 
-
-Телефонная база спамеров.
 $+7-909-052-xx-yy$
 
-Хранить на телефоне. 
-В Int32 не влазит. Нужно отвечать да/нет в период звонка (до принятия). 
-Гипотетически, $10^6$ "плохих" номеров.
+\vspace{5mm}
 
+Хранить на телефоне. 
+
+\vspace{5mm}
+
+В Int32 не влазит. Нужно отвечать да/нет в период звонка (до принятия). 
+Гипотетически, $10^6$ <<плохих>> номеров.
+
+\vspace{5mm}
 Создать bloomFilter с ошибкой $p=10^{-9}$. Пробежаться во всему пространству номеров телефонов и явно выписать false Positive объекты.
+
+\vspace{5mm}
 
 На таких ограничениях есть много решений.
 }
@@ -623,27 +661,30 @@ $+7-909-052-xx-yy$
 
 \frame
 {
-\frametitle{Bloom filter, use cases}
+\frametitle{Trie}
 
-trie (цифровое дерево, префиксное дерево) - структура данных, хранящая префиксы слов.
-Позволяет искать вхождение, и искать слова с заданным числом отпечаток.
+Trie (цифровое дерево, префиксное дерево) - структура данных, хранящая префиксы слов.
+Позволяет искать вхождение и слова с заданным числом отпечаток.
 
 
       \begin{figure}
         \includegraphics[height=0.3\textwidth]{trie.png}
       \end{figure}
 
+\vspace{5mm}
+
+<<ключ>>, <<ключница>>
 }
 
 
 
 \frame
 {
-\frametitle{Bloom filter, use cases}
+\frametitle{Trie}
 
 Предлагается хранить все префискы слов в bloomFilter. Все итоговые слова еще в одном bloomFilter.
 
-"ключ", "ключница" 
+
 
 В trie это обычно хранится булевым флагом, признак конца слова.
 
@@ -657,9 +698,7 @@ trie (цифровое дерево, префиксное дерево) - структура данных, хранящая префиксы 
 
 \frame
 {
-\frametitle{Bloom filter, use cases}
-
-Где используется в мире.
+\frametitle{Где используется в мире}
 
 Почти в любом кеше и базе данных. Проще проверить в bloomFilter, и только потом читать с диска / делать тяжелый запрос.
 
@@ -675,13 +714,17 @@ TODO: compressed bloom filter
 
 Задача: 
 \colorbox{gray!30}{select count(*) from table where object = N}
-
-
-
-
-
-
 }
+
+\frame
+{
+\frametitle{Count min sketch}
+
+\begin{center}
+{\huge Count min sketch}
+\end{center}
+}
+
 
 \frame
 {
