@@ -121,6 +121,34 @@
       \end{figure}
 }
 
+\frame
+{
+\frametitle{Абсолютная точность нужна не всегда}
+
+      \begin{figure}
+        \includegraphics[height=0.5\textwidth]{acc1.png}
+      \end{figure}
+}
+
+
+\frame
+{
+\frametitle{Абсолютная точность нужна не всегда}
+
+      \begin{figure}
+        \includegraphics[height=0.5\textwidth]{acc2.png}
+      \end{figure}
+}
+
+\frame
+{
+\frametitle{Абсолютная точность нужна не всегда}
+
+      \begin{figure}
+        \includegraphics[height=0.45\textwidth]{acc3.png}
+      \end{figure}
+}
+
 
 \frame
 {
@@ -682,15 +710,17 @@ Trie (бор, цифровое дерево, префиксное дерево) - структура данных, хранящая преф
 {
 \frametitle{Trie}
 
+Какой нужен интерфейс?
+
+\vspace{5mm}
+
 Предлагается хранить все префискы слов в bloomFilter. Все итоговые слова еще в одном bloomFilter.
 
+\vspace{5mm}
 
+Чтобы спуститься на уровень вниз - переберем алфавит (либо дополнительную структуру, хранящую возможные переходы).
 
-В trie это обычно хранится булевым флагом, признак конца слова.
-
-Чтобы спуститься на уровень вниз - переберем алфавит (либо доп. структуру, хранящую возможные переходы)
-
-Оценка
+\vspace{5mm}
 
 Здесь же мы тратим 20-30 бит (1.5 - 3.75 байта) на узел.
 }
@@ -719,7 +749,7 @@ TODO: compressed bloom filter
 
 \frame
 {
-\frametitle{Count min sketch}
+\frametitle{Задача}
 
 Задача: 
 \colorbox{gray!30}{select count(*) from table where object = N}
@@ -728,13 +758,34 @@ TODO: compressed bloom filter
 
 \frame
 {
-\frametitle{Count min sketch}
+\frametitle{Внутреннее устройство}
+\begin{center}
 
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (240, 0);
+\draw[gray, thick] (0, 20) -- (240, 20);
+\foreach \y in {0,...,3}
+  \draw[gray, thick] (0, 0 + 30 * \y) -- (240, 0 + 30 * \y);
+\foreach \y in {0,...,3}
+  \draw[gray, thick] (0, 20 + 30 * \y) -- (240, 20 + 30 * \y);
+\foreach \y in {0,...,3}
+  \foreach \x in {0,...,12}
+    \draw[gray, thick] (20 * \x, 20 + 30 * \y) -- (20 * \x, 0 + 30 * \y);
+\node[blue] at (-10,10) {$h_4$}; 
+\node[blue] at (-10,40) {$h_3$}; 
+\node[blue] at (-10,70) {$h_2$}; 
+\node[blue] at (-10,100) {$h_1$}; 
 
-      \begin{figure}
-        \includegraphics[height=0.3\textwidth]{mins.png}
-      \end{figure}
+\node[red] at (30,10) {$+1$}; 
+\node[red] at (130,40) {$+1$}; 
+\node[red] at (170,70) {$+1$}; 
+\node[red] at (10,100) {$+1$}; 
 
+\node[red] at (120,-10) {add("192.168.50.82")}; 
+
+\end{tikzpicture}
+
+\end{center}
 \pause
 
 $$query = min_{i \in 1 \ldots k}(t_i(h_i))$$
@@ -749,9 +800,11 @@ $$query = min_{i \in 1 \ldots k}(t_i(h_i))$$
 
 Проблема перекоса данных, когда все ячейки в матрицы > 0.
 
-Merge двух
+Merge двух.
 
 Поэлементно сложить внутренний массив.
+
+Можно вычитать. 
 
 TODO: параметры конструктора, память.
 
