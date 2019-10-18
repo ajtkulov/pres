@@ -743,9 +743,6 @@ Trie (бор, цифровое дерево, префиксное дерево) - структура данных, хранящая преф
 Почти в любом кеше и базе данных. Проще проверить в bloomFilter, и только потом читать с диска / делать тяжелый запрос.
 
 Google guava (jvm).
-TODO: обзор библиотек
-
-TODO: compressed bloom filter
 }
 
 \frame
@@ -810,77 +807,115 @@ $$query = min_{i \in 1 \ldots k}(t_i(h_i))$$
 
 Проблема перекоса данных, когда все ячейки в матрицы > 0.
 
-Merge двух.
+\vspace{5mm}
 
-Поэлементно сложить внутренний массив.
+Merge двух. Поэлементно сложить внутренний массив. Можно вычитать. 
 
-Можно вычитать. 
+\vspace{5mm}
 
-TODO: параметры конструктора, память.
+Конструктор: (relative error (eps), confidence (delta))  $(0.0000001, 0.9999)$
 
+\vspace{5mm}
+
+$$d = ceil(2 / eps)$$
+$$w = ceil(-log(1 - confidence) / log(2))$$
 }
-
-
-
-
 
 
 
 
 \frame
 {
-\frametitle{Desing, likes}
+\frametitle{Design. Лайки.}
 
-Пользователей - $10^9$, объектов - $10^9$. 
+\begin{center}
+{\huge Design. Лайки.}
+\end{center}
+}
 
-Всегда работает грубая сила <<мы купили кластер на $100 - 1 K - 10 K$ нод и храним все>>.
 
-Лайк - $(user_id, object_id)$. 
 
+
+\frame
+{
+\frametitle{Лайки}
+
+Пользователей и объектов - $10^9$
+
+Лайк - $(userId, objectId)$. 
+
+\vspace{5mm}
 Да, bloomFilter на факт лайка/дизлайка. 
 
-Количество лайков - классический KV, либо $Count-min-sketch(object_id)$.
+Количество лайков - классический KV, либо $CountMinSketch(objectId)$.
 
-Шардинг по $object_id, (user_id, object_id)$
+\vspace{5mm}
 
-Кто из друзей так же лайкал? Пробежаться по списку друзей, спросить bloomFilter.
-Естественный граф ($natural\ graph$), особенности.
+Шардинг по $objectId, (userId, objectId)$
+
+Кто из друзей так же лайкал? Естественный граф ($natural\ graph$), особенности.
+
+\vspace{5mm}
 
 Отложенный лайк, если пользователь быстро передумал или промахнулся.
+Нельзя <<накручивать>>.
 }
 
 
 \frame
 {
-\frametitle{Desing, views}
+\frametitle{Design. Просмотры.}
 
-Много объявлений (<<Avito>>), много пользователей. Хотим видеть общее количество уникальных просмотров, просмотров за 
+\begin{center}
+{\huge Design. Просмотры.}
+\end{center}
+}
+
+
+
+\frame
+{
+\frametitle{Просмотры}
+
+<<Avito>>, <<LJ>>. Хотим видеть общее количество уникальных просмотров, просмотров за 
 час/день/неделю/месяц. 
 
 \pause
 
 \vspace{5mm}
 
-Храним BloomFilter для (user.id, item.id), смотрел ли вообще конкретный человек конкретное объявление. Глобальный. Это и есть количество уникальных. 
+$BloomFilter$ для $(userId, itemId)$, смотрел ли вообще конкретный человек конкретное объявление. Глобальный. Это и есть количество уникальных. 
 
-Инкрементируем просмотры в Count min sketch, на каждый квант времени (час) - отдельный. 
-Их можно складывать/вычитать, организовать sliding window. В качестве ключа использовать item.id, можно расширенный (user.id, item.id).
+\vspace{5mm}
 
-
-
+Инкрементируем просмотры в $CountMinSketch$, на каждый квант времени (час) - отдельный. 
+Их можно складывать/вычитать, организовать $sliding\ window$. В качестве ключа использовать $itemId$ или $(userId, itemId)$.
 
 }
 
 
 \frame
 {
-\frametitle{Random facts}
+\frametitle{Extra}
 
-TODO: обзор библиотек
+Обзор библиотек (guava, stream-lib, spark)
 
-Quotient filter (a bit stronger than Bloom filter)
+\vspace{5mm}
 
-Абсолютная точность редко нужна, чаще нужен порядок. $67\ 108\ 864\ vs.\ 67.1M$
+$CountMinSketch, long[\,][\,]$
+
+\vspace{5mm}
+
+Quotient filter (немного сильнее чем Bloom filter)
+
+\vspace{5mm}
+
+(De-)Serialization (без x2, x3)
+
+\vspace{5mm}
+
+Compressed bloom filter
+
 
 }
 
@@ -910,6 +945,11 @@ $!?$
 \vspace{5mm}
 
 Можете задавать любые вопросы, но отвечу я вероятностно.
+
+\vspace{5mm}
+
+
+\href{mailto:ajtkulov@gmail.com}{ajtkulov@gmail.com}
 
 \vspace{5mm}
 
