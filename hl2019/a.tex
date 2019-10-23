@@ -738,7 +738,7 @@ Trie (бор, цифровое дерево, префиксное дерево) - структура данных, хранящая преф
 
 \frame
 {
-\frametitle{Где используется в мире}
+\frametitle{Где используется}
 
 Почти в любом кеше и базе данных. Проще проверить в bloomFilter, и только потом читать с диска / делать тяжелый запрос.
 
@@ -840,7 +840,11 @@ $$w = ceil(-log(1 - confidence) / log(2))$$
 {
 \frametitle{Лайки}
 
-Пользователей и объектов - $10^9$
+Пользователей и объектов - $10^9$. Проблема <<накрутки>>.
+
+\pause
+
+\vspace{5mm}
 
 Лайк - $(userId, objectId)$. 
 
@@ -894,11 +898,32 @@ $BloomFilter$ для $(userId, itemId)$, смотрел ли вообще конкретный человек конкр
 }
 
 
+\begin{frame}[fragile]
+\frametitle{Просмотры}
+
+Скользящее окно. Переход, а не полный пересчет.
+
+{\color{blue}
+\begin{verbatim}
+от  :     [            ]
+к   :       [            ]
+              =
+общее:      [          ] 
+переход: -[ ]         +[ ]
+\end{verbatim}
+}
+
+Каждый интервал времени - CountMinSketch.
+
+\end{frame}
+
 
 \begin{frame}[fragile]
 \frametitle{Extra}
 
-Обзор библиотек (guava, stream-lib, spark).
+Обзор библиотек (guava, stream-lib, spark). Driud. OLAP.
+
+
 
 \begin{verbatim}
 Let me google that: 
