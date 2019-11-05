@@ -114,6 +114,18 @@
 Немного CS, базовая теория вероятности.
 }
 
+\frame
+{
+\frametitle{Agenda}
+
+\begin{itemize}
+  \item HyperLogLog, подсчет уникальных
+  \item BloomFilter, запрос <<да>>/<<нет>>
+  \item CountMinSketch, подсчет количества
+\vspace{5mm}
+  \item Комбинирование этого, design
+\end{itemize}
+}
 
 
 
@@ -326,6 +338,23 @@ The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a t
       \begin{figure}
         \includegraphics[height=0.475\textwidth]{hll_stats.png}
       \end{figure}
+
+}
+
+
+\frame
+{
+\frametitle{HyperLogLog. Итого}
+
+Ctor: new HyperLogLog(int shards) 
+
+\vspace{5mm}
+
+Занимает 0.6Kb \ldots 40Kb памяти.
+
+\vspace{5mm}
+
+Приблизительно считаем количество уникальных элементов.
 
 }
 
@@ -669,17 +698,32 @@ $$bloom_1 * bloom_2 = bitAnd (bloom_1.bitset, bloom_2.bitset)$$
 \vspace{5mm}
 
 $$Partition.map(x => Bloom(\ldots)).reduce((x, y) => x + y)$$
+
+\vspace{5mm}
+
+\pause
+
+Обратная задача. По BloomFilter понять, сколько там элементов. 
+
 }
 
 \frame
 {
-\frametitle{Ctor}
+\frametitle{BloomFilter. Итого}
 
-Обратная задача. По BloomFilter понять, сколько там элементов. 
+
+Ctor: new BloomFilter(int count, double error)
+
+\pause
 
 \vspace{5mm}
 
-new BloomFilter(count, error)
+Занимает 10--30 бит на элемент.
+
+\pause
+\vspace{5mm}
+
+Вероятностно отвечаем на запрос вхождения объекта в множество.
 
 }
 
@@ -949,6 +993,8 @@ Merge двух. Поэлементно сложить внутренний массив. Можно вычитать.
 
 \vspace{5mm}
 
+\pause
+
 new CountMinSketch(eps, confidence)
 
 \vspace{5mm}
@@ -959,6 +1005,25 @@ new CountMinSketch(0.0000001, 0.9999)
 $$d = ceil(2 / eps)$$
 $$w = ceil(-log(1 - confidence) / log(2))$$
 }
+
+\frame
+{
+\frametitle{Count min sketch. Итого}
+
+Ctor: new CountMinSketch(double eps, double confidence)
+
+\vspace{5mm}
+\pause
+
+Занимает фиксированную память.
+
+\vspace{5mm}
+\pause
+
+Вероятностно считаем количество вхождений.
+
+}
+
 
 
 \frame
@@ -1110,6 +1175,11 @@ Quotient filter (немного сильнее, чем Bloom filter)
 
 Сжать данные в cookie
 
+\pause
+
+\vspace{5mm}
+
+<<Грубая сила>> всегда работает. Стоит ли?
 
 \end{frame}
 
