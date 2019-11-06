@@ -240,7 +240,10 @@
 {
 \frametitle{Шардинг}
 
-\colorbox{gray!30}{\ldots, 0.0000012, \ldots}
+\colorbox{gray!30}{\ldots, 0.0000012, \ldots}   
+\pause
+
+Где-то $10^6$ элементов, не так ли? Не похоже на $10^9$.
 
 \vspace{5mm}
 
@@ -249,6 +252,10 @@
 \colorbox{gray!30}{\ldots, 0.0000511, \ldots}
 
 \colorbox{gray!30}{\ldots, 0.0022424, \ldots}
+\pause
+
+Подозрительно, баланс не очень.
+
 
 \vspace{5mm}
 
@@ -261,6 +268,10 @@
 \colorbox{gray!30}{\ldots, 0.3000012, \ldots}
 
 \colorbox{gray!30}{\ldots, 0.0011099, \ldots}
+
+\pause
+
+Очень подозрительно. 
 
 }
 
@@ -407,6 +418,14 @@ Ctor: new HyperLogLog(int shards)
 
 На {\color{blue}<<мобильный телефон>>} поступает {\color{blue}<<входящий звонок>>}. Проверить, что {\color{blue}<<номера абонента>>} нет в {\color{blue}<<базе спамеров>>}, без тяжелого запроса в {\color{blue}<<сторонние сервисы>>}.
 
+\pause 
+
+\only<2>{    
+      \begin{figure}
+        \includegraphics[height=0.375\textwidth]{call.png}
+      \end{figure}
+}
+
 \vspace{5mm}
 
 \pause
@@ -466,22 +485,36 @@ vs.
 
 Легко видеть, что $\textsuperscript{\textcopyright}$:
 $$1$$
-
 \pause 
-
+\only<2>{
+\begin{center} 
+Вставляем куда угодно
+\end{center}
+}
+\pause
 $$1 * (9 / 10)$$
-
 \pause 
-
+\only<4>{
+\begin{center} 
+Одна ячейка уже занята. Свободны 9 из 10 
+\end{center}
+}
+\pause 
 $$1 * (9 / 10) * (8 / 10)$$
-
 \pause 
-
+\only<6>{
+\begin{center} 
+Уже две ячейки заняты. Свободны 8 из 10 
+\end{center}
+}
+\pause 
 $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
-
-
-
-
+\pause 
+\only<8>{\begin{center} 
+Обратная задача. Первоначально вопрос про коллизии.
+\end{center}
+}
+\pause
 Да, это та же задача, что и в парадоксе дней рождения. 
 
 \pause
@@ -526,9 +559,9 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
 \foreach \x in {0,...,18}
  \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
 \node[blue] at (10,30) {$\{x\}$}; 
-\node[blue] at (30,10) {1}; 
-\node[blue] at (110,10) {1}; 
-\node[blue] at (270,10) {1}; 
+\node[blue] at (30,10) {\textbf{1}}; 
+\node[blue] at (110,10) {\textbf{1}}; 
+\node[blue] at (270,10) {\textbf{1}}; 
 \end{tikzpicture}
 
 \onslide<3, 4>
@@ -539,12 +572,12 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
  \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
 \node[blue] at (10,30) {$\{x\}$}; 
 \node[red] at (30,30) {$\{y\}$}; 
-\node[blue] at (30,10) {1}; 
-\node[blue] at (110,10) {1}; 
-\node[blue] at (270,10) {1}; 
-\node[red] at (90,10) {1}; 
-\node[red] at (230,10) {1}; 
-\node[red] at (330,10) {1}; 
+\node[blue] at (30,10) {\textbf{1}}; 
+\node[blue] at (110,10) {\textbf{1}}; 
+\node[blue] at (270,10) {\textbf{1}}; 
+\node[red] at (90,10) {\textbf{1}}; 
+\node[red] at (230,10) {\textbf{1}}; 
+\node[red] at (330,10) {\textbf{1}}; 
 
 \end{tikzpicture}
 
@@ -557,15 +590,15 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
 \node[blue] at (10,30) {$\{x\}$}; 
 \node[red] at (30,30) {$\{y\}$}; 
 \node[violet] at (50,30) {$\{z\}$}; 
-\node[blue] at (30,10) {1}; 
-\node[blue] at (110,10) {1}; 
-\node[blue] at (270,10) {1}; 
-\node[red] at (90,10) {1}; 
-\node[red] at (230,10) {1}; 
-\node[red] at (330,10) {1}; 
-\node[violet] at (70,10) {1}; 
-\node[violet] at (110,10) {1}; 
-\node[violet] at (230,10) {1}; 
+\node[blue] at (30,10) {\textbf{1}}; 
+\node[blue] at (110,10) {\textbf{1}}; 
+\node[blue] at (270,10) {\textbf{1}}; 
+\node[red] at (90,10) {\textbf{1}}; 
+\node[red] at (230,10) {\textbf{1}}; 
+\node[red] at (330,10) {\textbf{1}}; 
+\node[violet] at (70,10) {\textbf{1}}; 
+\node[violet] at (110,10) {\textbf{1}}; 
+\node[violet] at (230,10) {\textbf{1}}; 
 
 \end{tikzpicture}
 
@@ -579,15 +612,15 @@ $$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
 \node at (10,30) {$\{x\}$}; 
 \node at (30,30) {$\{y\}$}; 
 \node at (50,30) {$\{z\}$}; 
-\node at (30,10) {1}; 
-\node at (110,10) {1}; 
-\node at (270,10) {1}; 
-\node at (90,10) {1}; 
-\node at (230,10) {1}; 
-\node at (330,10) {1}; 
-\node at (70,10) {1}; 
-\node at (110,10) {1}; 
-\node at (230,10) {1}; 
+\node at (30,10) {\textbf{1}}; 
+\node at (110,10) {\textbf{1}}; 
+\node at (270,10) {\textbf{1}}; 
+\node at (90,10) {\textbf{1}}; 
+\node at (230,10) {\textbf{1}}; 
+\node at (330,10) {\textbf{1}}; 
+\node at (70,10) {\textbf{1}}; 
+\node at (110,10) {\textbf{1}}; 
+\node at (230,10) {\textbf{1}}; 
 
 \end{tikzpicture}
 
@@ -632,12 +665,66 @@ Bloom Filter:
 error = 10^{-6}
 
 \end{verbatim}
-
-
-
-
-
 \end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Confusion matrix}
+
+\begin{verbatim}
+*---------------*---------------*    Медицинский тест
+| TruePositive  | FalsePositive |                140 |   113
+*---------------*---------------*               -----*------- 
+| FalseNegative | TrueNegative  |                  8 | 21414
+*---------------*---------------*           
+
+   болен, правильно определили | не болен, неправильно определили
+ ------------------------------*-----------------------------------     
+ болен, неправильно определили | не болен, правильно определили
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Confusion matrix}
+
+\begin{verbatim}
+*---------------*---------------*    Поиск нефти
+| TruePositive  | FalsePositive |                140 |   113
+*---------------*---------------*               -----*------- 
+| FalseNegative | TrueNegative  |                  8 | 21414
+*---------------*---------------*           
+
+     есть нефть, нашли      | нефть отсутствует, но бурили
+----------------------------*------------------------------
+ нефть есть, но и не искали | нефти нет и не искали
+
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Confusion matrix}
+
+\begin{verbatim}
+*---------------*---------------*    
+| TruePositive  | FalsePositive |    
+*---------------*---------------*    
+| FalseNegative | TrueNegative  |    
+*---------------*---------------*           
+
+Bloom Filter:
+
+157414 |       7
+-------*---------
+     0 | 6837254
+
+error = 10^{-6}
+FalseNegative = 0
+
+\end{verbatim}
+\end{frame}
+
+
 
 \begin{frame}[plain]
 
