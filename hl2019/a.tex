@@ -774,9 +774,11 @@ Ctor: new BloomFilter(int count, double error)
 
 \frame
 {
-\frametitle{Телефонная база спамеров}
+\frametitle{Телефонная база спамеров, без потерь}
 
 $+7-909-052-xx-yy$
+
+\pause
 
 \vspace{5mm}
 Создать bloomFilter с ошибкой $p=10^{-9}$. Пробежаться во всему пространству номеров телефонов и явно выписать FalsePositive-объекты.
@@ -814,7 +816,7 @@ Trie (бор, цифровое дерево, префиксное дерево) -- структура данных, хранящая пре
 
 \vspace{5mm}
 
-Храним все префискы слов в bloomFilter. Все итоговые слова в другом BloomFilter.
+Храним все префиксы слов в bloomFilter. Все итоговые слова в другом BloomFilter.
 
 \vspace{5mm}
 
@@ -1146,7 +1148,7 @@ $BloomFilter(userId, itemId)$, смотрел ли конкретный человек конкретное объявлен
 \begin{frame}[fragile]
 \frametitle{Extra, overview}
 
-Обзор библиотек (guava, stream-lib, spark). Driud. OLAP.
+Обзор библиотек (guava, stream-lib, Apache Spark). Apache Druid. OLAP.
 
 \pause
 
