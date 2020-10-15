@@ -1,0 +1,1366 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage[russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[cp1251]{inputenc}
+% \usepackage[utf8]{inputenc}
+\usepackage{epigraph}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{verbatimbox}
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,height=6cm,compat=1.3}
+
+\usepgflibrary{arrows}
+
+
+\usetheme{Madrid}
+
+\newcommand*{\sele}[1]{{\bf #1}}
+\newcommand*{\sel}[1]{\textcolor{blue}{#1}}
+\newcommand*{\prob}[1]{\textcolor{magenta}{#1}}
+\newcommand*{\vs}[0]{\vspace{10pt}}
+\newcommand<>{\fullsizegraphic}[1]{
+%  \begin{textblock*}{0cm}(-1cm,-3.78cm)
+  \includegraphics[width={\paperwidth}]{#1}
+%  \end{textblock*}
+}
+
+\title[Вероятностные структуры данных]{Кое-что о вероятностных структурах данных}
+\author{Pavel Ajtkulov}
+\institute[]{ajtkulov@gmail.com, Orb Intelligence/D \& B}
+\date{16 октября 2020 г.}
+
+\begin{document}
+
+\mode<all>
+{
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{logo.png}}
+\begin{frame}[plain]
+
+{\center
+{\color{white}
+{\hspace{20pt}}
+{\huge  Кое-что о вероятностных структурах данных}}
+}
+
+\end{frame}
+}
+\mode<all>{\usebackgroundtemplate{}}
+\mode*
+
+
+\frame{\titlepage}
+
+
+
+\frame
+{
+\frametitle{Обо мне}
+
+\begin{itemize}
+  \item data engineer
+  \item scala, fp, reasonable fp
+  \item спортивное ЧГК (Puzzle, top 250)
+  \item шахматы (Elo = 1950..2000, max = 2044)
+  \item бег (марафон: 3h 57m, $\frac{1}{2}$ марафон: 1h 43m, 10k: 45m 40s)
+\end{itemize}
+
+
+}
+
+
+\frame
+{
+\frametitle{Чего не будет в этом докладе}
+
+
+\begin{itemize}
+  \item TCS
+  \item skip list
+  \item treap
+  \item Monte Carlo
+  \item Local sensevity hashing
+  \item etc.
+\end{itemize}
+
+
+}
+
+\frame
+{
+\frametitle{Что будет в этом докладе}
+
+
+Вероятностные структуры данных, которые позволяют экономить память.
+
+\vspace{5mm}
+
+
+Данных много. 
+
+Храним мало, либо очень мало. 
+
+\vspace{5mm}
+
+Очень ограниченные задачи. 
+
+Шаг вправо, шаг влево -- попытка к бегству! Стреляем без предупреждения!
+
+\vspace{5mm}
+
+Немного CS, базовая теория вероятности.
+}
+
+\frame
+{
+\frametitle{Agenda}
+
+\begin{itemize}
+  \item HyperLogLog, подсчет уникальных
+  \item BloomFilter, запрос <<да>>/<<нет>>
+  \item CountMinSketch, подсчет количества
+\vspace{5mm}
+  \item Комбинирование этого, design
+\end{itemize}
+}
+
+
+
+\frame
+{
+\frametitle{Предупреждение}
+
+\epigraph{Надежность -- это когда вашу программу ставят на военную технику, а вы спите спокойно}{\textit{Н. Н. Непейвода}}
+
+\vspace{5mm}
+
+Примечание: если от вашего кода зависит человеческая жизнь -- одумайтесь.
+
+}
+
+\frame
+{
+\frametitle{Главное -- не терять голову}
+
+      \begin{figure}
+        \includegraphics[height=0.55\textwidth]{killbill.jpg}
+      \end{figure}
+}
+
+\frame
+{
+\frametitle{Абсолютная точность нужна не всегда}
+
+      \begin{figure}
+        \includegraphics[height=0.9\textwidth]{acc1.png}
+      \end{figure}
+}
+
+
+\frame
+{
+\frametitle{Абсолютная точность нужна не всегда}
+
+      \begin{figure}
+        \includegraphics[height=0.5\textwidth]{acc2.png}
+      \end{figure}
+}
+
+\frame
+{
+\frametitle{Абсолютная точность нужна не всегда}
+
+      \begin{figure}
+        \includegraphics[height=1.2\textwidth]{acc3.png}
+      \end{figure}
+}
+
+
+\frame
+{
+\frametitle{HyperLogLog}
+
+\begin{center}
+{\huge HyperLogLog}
+\end{center}
+}
+
+\frame
+{
+\frametitle{Задача}
+
+
+\colorbox{gray!30}{select count(distinct(field)) from table}
+
+\vspace{5mm}
+
+От 10M, лучше от 100M. Eще больше. Значительно.
+
+Иначе можно решать классическими способами.
+
+\pause
+
+\vspace{5mm}
+
+\colorbox{gray!30}{$select\ approx\_count(distinct(field))\ from\ table$}
+
+\vspace{5mm}
+
+Внутренности БД, когда точность не нужна. Больше некоего порога.
+
+}
+
+
+
+\frame
+{
+\frametitle{Идеальный мир}
+
+Рассмотрим минимальный hash.
+
+\vspace{5mm}
+
+\colorbox{gray!30}{obj1, obj2, obj3, obj4, \ldots}
+
+\vspace{5mm}
+
+
+\colorbox{gray!30}{0.672, 0.368, 0.864, 0.782, \ldots}
+
+\vspace{5mm}
+
+Встретить 0.368 <<более вероятно>> $\textsuperscript{\textcopyright}$, чем 0.000002512 (на 5-10 элементах).
+}
+
+
+\frame
+{
+\frametitle{Шардинг}
+
+\colorbox{gray!30}{\ldots, 0.0000012, \ldots}   
+\pause
+
+Где-то $10^6$ элементов, не так ли? Не похоже на $10^9$.
+
+\vspace{5mm}
+
+\pause
+
+\colorbox{gray!30}{\ldots, 0.0000511, \ldots}
+
+\colorbox{gray!30}{\ldots, 0.0022424, \ldots}
+\pause
+
+Подозрительно, баланс не очень.
+
+
+\vspace{5mm}
+
+\pause
+
+\colorbox{gray!30}{\ldots, 0.0002111, \ldots}
+
+\colorbox{gray!30}{\ldots, 0.0004012, \ldots}
+
+\colorbox{gray!30}{\ldots, 0.3000012, \ldots}
+
+\colorbox{gray!30}{\ldots, 0.0011099, \ldots}
+
+\pause
+
+Очень подозрительно. 
+
+}
+
+
+\begin{frame}[fragile]
+\frametitle{Внутренности}
+
+Применим <<шардинг>> (простой roundRobin), будем считать min-hash для каждого подпотока.
+
+  \begin{verbatim}
+          a1, aN+1, ...         minHash
+stream -> a2                    minHash
+          ...                   ...
+          aN                    minHash
+
+  \end{verbatim}
+
+\pause
+
+
+Internal Representation: $Array[Double] \rightarrow Array[Int] \rightarrow Array[Byte_{6}]$
+
+\vspace{5mm}
+
+$minHash() \rightarrow maxZeroPrefix()$
+
+\end{frame}
+
+\begin{frame}[plain]
+
+      \begin{figure}
+        \includegraphics[height=0.8\textwidth]{hll_paper.png}
+      \end{figure}
+\end{frame}
+
+
+\begin{frame}[plain]
+
+      \begin{figure}
+        \includegraphics[height=0.5\textwidth]{cocain.jpg}
+      \end{figure}
+\end{frame}
+
+
+
+\frame
+{
+\frametitle{Random facts}
+
+Не BTC, но тоже нули. Log. LogLog.
+$$0.000001010111_2 \mapsto 5$$
+
+Набор предрасчитанных магических констант.
+
+Где используется: 
+во многих базах данных ($redis,\ redshift,\ google\ bigquery$).
+
+\vspace{5mm}
+
+\colorbox{gray!30}{$select\ approx\_count(distinct(field))\ from\ table$}
+
+\vspace{5mm}
+
+The HyperLogLog algorithm is able to estimate cardinalities of $> 10^9$ with a typical accuracy (standard error) of $2\%$, using 1.5 kB of memory. (original paper, wiki)
+
+\vspace{5mm}
+
+Распределенный подсчет HyperLogLog. 
+
+}
+
+\frame
+{
+\frametitle{Stats}
+      \begin{figure}
+        \includegraphics[height=0.475\textwidth]{hll_stats.png}
+      \end{figure}
+
+}
+
+
+\frame
+{
+\frametitle{HyperLogLog. Итого}
+
+Ctor: new HyperLogLog(int shards) 
+
+\vspace{5mm}
+
+Занимает 0.6Kb \ldots 40Kb памяти.
+
+\vspace{5mm}
+
+Приблизительно считаем количество уникальных элементов.
+
+}
+
+
+\begin{frame}[fragile]
+
+\frametitle{Нужно ли где-то в простой жизни?}
+
+Сетевое оборудование, считать количество уникальных src/dest-соединений. 
+Малое количество памяти, большое число объектов. 
+Определение DDoS, <<нечисти>>.
+
+\pause
+
+{\color{blue}
+\begin{verbatim}
+  stream, stream, stream, stream, ...
+
+    [ new HLL ]
+        [ new HLL ]
+            [ new HLL ]
+
+    -------------time>>
+    [  ]        -  5 min
+    [         ] - 30 min
+
+\end{verbatim}
+}
+
+\pause
+
+Если вы работаете в FAANG, \ldots
+
+\end{frame}
+
+
+\frame
+{
+\frametitle{Bloom filter}
+
+\begin{center}
+{\huge Bloom filter}
+\end{center}
+}
+
+
+\frame
+{
+\frametitle{Задача}
+
+На {\color{blue}<<мобильный телефон>>} поступает {\color{blue}<<входящий звонок>>}. Проверить, что {\color{blue}<<номера абонента>>} нет в {\color{blue}<<базе спамеров>>}, без тяжелого запроса в {\color{blue}<<сторонние сервисы>>}.
+
+\pause 
+
+\only<2>{    
+      \begin{figure}
+        \includegraphics[height=0.375\textwidth]{call.png}
+      \end{figure}
+}
+
+\vspace{5mm}
+
+\pause
+
+{\color{blue} Абстракция: база данных/запрос/кэш/чтение с диска.}
+
+\vspace{5mm}
+
+\pause
+
+Только ответ <<да>>/<<нет>>.
+
+\vspace{5mm}
+
+\pause
+
+Задача перечисления, порядок добавления, возможность удаления сюда не входит.
+
+\vspace{5mm}
+
+Если объектов немного, то классика (hashTable).
+}
+
+\frame
+{
+\frametitle{Сон - для слабаков}
+
+      \begin{figure}
+        \includegraphics[height=0.55\textwidth]{medvedev_sleep.jpg}
+      \end{figure}
+}
+
+
+\begin{frame}[fragile]
+\frametitle{Разогрев}
+
+Есть hashTable с 10 слотами, вставляем 3 объекта. С какой вероятностью будут коллизии?
+
+\pause
+
+\vspace{5mm}
+
+{\color{blue}
+\begin{verbatim}
+[ ] [ ] [*] [ ] [*] [ ] [*] [ ] [ ] [ ]
+
+vs.
+
+[ ] [ ] [*] [ ] [*] [ ] [ ] [ ] [ ] [ ]
+         *
+\end{verbatim}
+}
+
+\end{frame}
+
+\begin{frame}[plain]
+
+      \begin{figure}
+        \includegraphics[height=0.5\textwidth]{tick1.jpg}
+      \end{figure}
+\end{frame}
+
+
+\frame
+{
+\frametitle{Разогрев}
+
+Легко видеть, что $\textsuperscript{\textcopyright}$:
+$$1$$
+\pause 
+\only<2>{
+\begin{center} 
+Вставляем куда угодно
+\end{center}
+}
+\pause
+$$1 * (9 / 10)$$
+\pause 
+\only<4>{
+\begin{center} 
+Одна ячейка уже занята. Свободны 9 из 10 
+\end{center}
+}
+\pause 
+$$1 * (9 / 10) * (8 / 10)$$
+\pause 
+\only<6>{
+\begin{center} 
+Уже две ячейки заняты. Свободны 8 из 10 
+\end{center}
+}
+\pause 
+$$1 - 1 * (9 / 10) * (8 / 10) = 1 - 0.72 = 0.28$$
+\pause 
+\only<8>{\begin{center} 
+Обратная задача. Первоначально вопрос про коллизии.
+\end{center}
+}
+\pause
+Да, это та же задача, что и в парадоксе дней рождения. 
+
+\pause
+
+\vspace{5mm}
+
+Лайфхак: функция растет как $sqrt(n)$. 
+
+Посчитать для int32, int64.
+
+}
+
+\frame
+{
+\frametitle{Главное - держаться}
+
+      \begin{figure}
+        \includegraphics[height=0.55\textwidth]{medvedev_happy.jpg}
+      \end{figure}
+}
+
+
+\frame
+{
+\frametitle{Идеальный мир}
+
+Коллизии отсутствуют и бесконечная память.
+
+\vspace{5mm}
+
+Тогда бы хранили битовый флаг на бесконечной ленте. 
+}
+
+\frame
+{
+\frametitle{Реальность, несколько хэш-функций}
+
+\begin{center}
+\onslide<1, 2>
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (360, 0);
+\node[gray] at (10,30) {$\{\}$}; 
+\draw[gray, thick] (0, 20) -- (360, 20);
+\foreach \x in {0,...,18}
+ \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
+\end{tikzpicture}
+
+\onslide<2, 3>
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (360, 0);
+\draw[gray, thick] (0, 20) -- (360, 20);
+\foreach \x in {0,...,18}
+ \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
+\node[blue] at (10,30) {$\{x\}$}; 
+\node[blue] at (30,10) {\textbf{1}}; 
+\node[blue] at (110,10) {\textbf{1}}; 
+\node[blue] at (270,10) {\textbf{1}}; 
+\end{tikzpicture}
+
+\onslide<3, 4>
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (360, 0);
+\draw[gray, thick] (0, 20) -- (360, 20);
+\foreach \x in {0,...,18}
+ \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
+\node[blue] at (10,30) {$\{x\}$}; 
+\node[red] at (30,30) {$\{y\}$}; 
+\node[blue] at (30,10) {\textbf{1}}; 
+\node[blue] at (110,10) {\textbf{1}}; 
+\node[blue] at (270,10) {\textbf{1}}; 
+\node[red] at (90,10) {\textbf{1}}; 
+\node[red] at (230,10) {\textbf{1}}; 
+\node[red] at (330,10) {\textbf{1}}; 
+
+\end{tikzpicture}
+
+\onslide<4, 5>
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (360, 0);
+\draw[gray, thick] (0, 20) -- (360, 20);
+\foreach \x in {0,...,18}
+ \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
+\node[blue] at (10,30) {$\{x\}$}; 
+\node[red] at (30,30) {$\{y\}$}; 
+\node[violet] at (50,30) {$\{z\}$}; 
+\node[blue] at (30,10) {\textbf{1}}; 
+\node[blue] at (110,10) {\textbf{1}}; 
+\node[blue] at (270,10) {\textbf{1}}; 
+\node[red] at (90,10) {\textbf{1}}; 
+\node[red] at (230,10) {\textbf{1}}; 
+\node[red] at (330,10) {\textbf{1}}; 
+\node[violet] at (70,10) {\textbf{1}}; 
+\node[violet] at (110,10) {\textbf{1}}; 
+\node[violet] at (230,10) {\textbf{1}}; 
+
+\end{tikzpicture}
+
+
+\onslide<5>
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (360, 0);
+\draw[gray, thick] (0, 20) -- (360, 20);
+\foreach \x in {0,...,18}
+ \draw[gray, thick] (20 * \x, 20) -- (20 * \x, 0);
+\node at (10,30) {$\{x\}$}; 
+\node at (30,30) {$\{y\}$}; 
+\node at (50,30) {$\{z\}$}; 
+\node at (30,10) {\textbf{1}}; 
+\node at (110,10) {\textbf{1}}; 
+\node at (270,10) {\textbf{1}}; 
+\node at (90,10) {\textbf{1}}; 
+\node at (230,10) {\textbf{1}}; 
+\node at (330,10) {\textbf{1}}; 
+\node at (70,10) {\textbf{1}}; 
+\node at (110,10) {\textbf{1}}; 
+\node at (230,10) {\textbf{1}}; 
+
+\end{tikzpicture}
+
+\end{center}
+
+}
+
+\frame
+{
+\frametitle{Реальность, несколько хеш-функций}
+
+
+      \begin{figure}
+        \includegraphics[height=0.3\textwidth]{bloom.png}
+      \end{figure}
+
+
+Проверка.  Только False Positive.
+
+Нельзя удалять.
+
+Confusion matrix.
+}
+
+\begin{frame}[fragile]
+\frametitle{Confusion matrix}
+
+\begin{verbatim}
+*---------------*---------------*    Медицинский тест, геология:
+| TruePositive  | FalsePositive |                140 |   113
+*---------------*---------------*               -----*------- 
+| FalseNegative | TrueNegative  |                  8 | 21414
+*---------------*---------------*           
+
+
+Bloom Filter:
+
+157414 |       7
+-------*---------
+     0 | 6837254
+
+error = 10^{-6}
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Confusion matrix}
+
+\begin{verbatim}
+*---------------*---------------*    Медицинский тест
+| TruePositive  | FalsePositive |                140 |   113
+*---------------*---------------*               -----*------- 
+| FalseNegative | TrueNegative  |                  8 | 21414
+*---------------*---------------*           
+
+   болен, правильно определили | не болен, неправильно определили
+ ------------------------------*-----------------------------------     
+ болен, неправильно определили | не болен, правильно определили
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Confusion matrix}
+
+\begin{verbatim}
+*---------------*---------------*    Поиск нефти
+| TruePositive  | FalsePositive |                140 |   113
+*---------------*---------------*               -----*------- 
+| FalseNegative | TrueNegative  |                  8 | 21414
+*---------------*---------------*           
+
+     есть нефть, нашли      | нефть отсутствует, но бурили
+----------------------------*------------------------------
+ нефть есть, но и не искали | нефти нет и не искали
+
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Confusion matrix}
+
+\begin{verbatim}
+*---------------*---------------*    
+| TruePositive  | FalsePositive |    
+*---------------*---------------*    
+| FalseNegative | TrueNegative  |    
+*---------------*---------------*           
+
+Bloom Filter:
+
+157414 |       7
+-------*---------
+     0 | 6837254
+
+error = 10^{-6}
+FalseNegative = 0
+
+\end{verbatim}
+\end{frame}
+
+
+
+\begin{frame}[plain]
+
+      \begin{figure}
+        \includegraphics[height=0.65\textwidth]{bloom_wiki.png}
+      \end{figure}
+\end{frame}
+
+
+\frame
+{
+\frametitle{Посчитаем, не все так плохо}
+
+На каждые $10^{-3}$ ошибки требуется примерно 10 бит (бит, не байт!).
+
+То есть на $10^{-6}$ -- 20 бит (2.5 байта), $10^{-9}$ -- 30 бит (3.75 байта, все еще меньше одного указателя).
+
+\vspace{5mm}
+
+Объекты -- довольно <<жирные>>.
+
+\pause
+
+\vspace{5mm}
+
+Внутри это всего лишь bitset. Нет никакого memory footprint.
+
+\vspace{5mm}
+
+<<Минусы>>: исходная постановка урезана, нет <<честной>> возможности удалять, перечислять объекты.
+}
+
+\frame
+{
+\frametitle{Честность и относительность}
+
+
+Удалять -- завести второй bloomFilter для удаленных. Делать 2 запроса. 
+
+\vspace{5mm}
+
+Нельзя <<честно>> удалить, а потом снова добавить.
+
+\vspace{5mm}
+
+Можно... Вы поняли идею.
+}
+
+
+\frame
+{
+\frametitle{Combine}
+
+$$bloom_1 + bloom_2 = bitOr (bloom_1.bitset, bloom_2.bitset)$$
+
+$$bloom_1 * bloom_2 = bitAnd (bloom_1.bitset, bloom_2.bitset)$$
+
+\vspace{5mm}
+
+$$Partition.map(x => Bloom(\ldots)).reduce((x, y) => x + y)$$
+
+\vspace{5mm}
+
+\pause
+
+Обратная задача. По BloomFilter понять, сколько там элементов. 
+
+}
+
+\frame
+{
+\frametitle{BloomFilter. Итого}
+
+
+Ctor: new BloomFilter(int count, double error)
+
+\pause
+
+\vspace{5mm}
+
+Занимает 10--30 бит на элемент.
+
+\pause
+\vspace{5mm}
+
+Вероятностно отвечаем на запрос вхождения объекта в множество.
+
+}
+
+
+\frame
+{
+\frametitle{Bloom filter, use cases}
+
+\begin{center}
+{\huge Bloom filter, use cases}
+\end{center}
+}
+
+
+\frame
+{
+\frametitle{Key-value storage}
+
+
+Если различный значений не много $(k \le 10)$, то можно хранить $k$ bloom filter'ов. 
+Спросить каждый. Учитывать, что ошибка меняется (* k).
+
+}
+
+
+\frame
+{
+\frametitle{Key-value storage}
+
+Если различных значений много $(k > 10)$, то можно хранить $k$ bloom filter'ов.
+Организовать дерево на них. 
+
+\pause
+
+\vspace{5mm}
+
+На самом деле это сложнее. Так как необходимо контролировать размеры и ошибку.
+На домашнее задание.
+
+
+      \begin{figure}
+        \includegraphics[height=0.3\textwidth]{btree.png}
+      \end{figure}
+
+
+}
+
+
+\frame
+{
+\frametitle{Телефонная база спамеров, без потерь}
+
+$+7-909-052-xx-yy$
+
+\pause
+
+\vspace{5mm}
+Создать bloomFilter с ошибкой $p=10^{-9}$. Пробежаться во всему пространству номеров телефонов и явно выписать FalsePositive-объекты.
+
+\vspace{5mm}
+
+На таких ограничениях есть много решений.
+}
+
+
+\frame
+{
+\frametitle{Trie}
+
+Trie (бор, цифровое дерево, префиксное дерево) -- структура данных, хранящая префиксы слов.
+Позволяет искать вхождение и слова с заданным числом <<очепяток>>.
+
+
+      \begin{figure}
+        \includegraphics[height=0.3\textwidth]{trie.png}
+      \end{figure}
+
+\vspace{5mm}
+
+<<ключ>>, <<ключница>>
+}
+
+
+
+\frame
+{
+\frametitle{Trie}
+
+Какой нужен интерфейс?
+
+\vspace{5mm}
+
+Храним все префиксы слов в bloomFilter. Все итоговые слова в другом BloomFilter.
+
+\vspace{5mm}
+
+\pause
+
+Спуск вниз -- переберем алфавит либо дополнительную структуру, хранящую возможные переходы.
+
+\vspace{5mm}
+
+Здесь же мы тратим ~20 бит на узел, $error = 10^{-6}$.
+}
+
+
+\frame
+{
+\frametitle{Где используется}
+
+Почти в любом кэше и базе данных. Проще проверить в BloomFilter и только потом читать с диска / делать тяжелый запрос.
+
+\vspace{5mm}
+
+Google guava (jvm).
+}
+
+\frame
+{
+\frametitle{Count min sketch}
+
+\begin{center}
+{\huge Count min sketch}
+\end{center}
+}
+
+\frame
+{
+\frametitle{Задача}
+
+Задача: 
+\colorbox{gray!30}{select count(*) from table where object = N}
+}
+
+
+\frame
+{
+\frametitle{Внутреннее устройство}
+\begin{center}
+
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (240, 0);
+\draw[gray, thick] (0, 20) -- (240, 20);
+\foreach \y in {0,...,3}
+  \draw[gray, thick] (0, 0 + 30 * \y) -- (240, 0 + 30 * \y);
+\foreach \y in {0,...,3}
+  \draw[gray, thick] (0, 20 + 30 * \y) -- (240, 20 + 30 * \y);
+\foreach \y in {0,...,3}
+  \foreach \x in {0,...,12}
+    \draw[gray, thick] (20 * \x, 20 + 30 * \y) -- (20 * \x, 0 + 30 * \y);
+\node[blue] at (-10,10) {$h_4$}; 
+\node[blue] at (-10,40) {$h_3$}; 
+\node[blue] at (-10,70) {$h_2$}; 
+\node[blue] at (-10,100) {$h_1$}; 
+
+\node[red] at (30,10) {$+1$}; 
+\node[red] at (130,40) {$+1$}; 
+\node[red] at (170,70) {$+1$}; 
+\node[red] at (10,100) {$+1$}; 
+
+\node[red] at (120,-10) {add("192.168.50.82")}; 
+
+\end{tikzpicture}
+
+\end{center}
+
+}
+
+\frame
+{
+\frametitle{Запрос}
+\begin{center}
+
+\begin{tikzpicture}[scale=0.036]
+\draw[gray, thick] (0, 0) -- (240, 0);
+\draw[gray, thick] (0, 20) -- (240, 20);
+\foreach \y in {0,...,3}
+  \draw[gray, thick] (0, 0 + 30 * \y) -- (240, 0 + 30 * \y);
+\foreach \y in {0,...,3}
+  \draw[gray, thick] (0, 20 + 30 * \y) -- (240, 20 + 30 * \y);
+\foreach \y in {0,...,3}
+  \foreach \x in {0,...,12}
+    \draw[gray, thick] (20 * \x, 20 + 30 * \y) -- (20 * \x, 0 + 30 * \y);
+\node[blue] at (-10,10) {$h_4$}; 
+\node[blue] at (-10,40) {$h_3$}; 
+\node[blue] at (-10,70) {$h_2$}; 
+\node[blue] at (-10,100) {$h_1$}; 
+
+
+\node[black] at (10,10) {$3$}; 
+\node[black] at (30,10) {$3$}; 
+\node[black] at (50,10) {$4$}; 
+\node[black] at (70,10) {$7$}; 
+\node[black] at (90,10) {$0$}; 
+\node[black] at (110,10) {$2$}; 
+\node[black] at (130,10) {$0$}; 
+\node[black] at (150,10) {$3$}; 
+\node[black] at (170,10) {$6$}; 
+\node[black] at (190,10) {$1$}; 
+\node[black] at (210,10) {$4$}; 
+\node[black] at (230,10) {$1$}; 
+
+\node[black] at (10,40) {$3$}; 
+\node[black] at (30,40) {$3$}; 
+\node[black] at (50,40) {$4$}; 
+\node[black] at (70,40) {$7$}; 
+\node[black] at (90,40) {$1$}; 
+\node[black] at (110,40) {$2$}; 
+% \node[black] at (130,40) {$0$}; 
+\node[black] at (150,40) {$3$}; 
+\node[black] at (170,40) {$6$}; 
+\node[black] at (190,40) {$6$}; 
+\node[black] at (210,40) {$2$}; 
+\node[black] at (230,40) {$2$}; 
+
+\node[black] at (10,70) {$2$}; 
+\node[black] at (30,70) {$1$}; 
+\node[black] at (50,70) {$4$}; 
+\node[black] at (70,70) {$6$}; 
+\node[black] at (90,70) {$6$}; 
+\node[black] at (110,70) {$0$}; 
+\node[black] at (130,70) {$4$}; 
+\node[black] at (150,70) {$5$}; 
+% \node[black] at (170,70) {$6$}; 
+\node[black] at (190,70) {$4$}; 
+\node[black] at (210,70) {$4$}; 
+\node[black] at (230,70) {$2$}; 
+
+% \node[black] at (10,70) {$3$}; 
+\node[black] at (30,100) {$0$}; 
+\node[black] at (50,100) {$3$}; 
+\node[black] at (70,100) {$4$}; 
+\node[black] at (90,100) {$4$}; 
+\node[black] at (110,100) {$3$}; 
+\node[black] at (130,100) {$1$}; 
+\node[black] at (150,100) {$3$}; 
+\node[black] at (170,100) {$7$}; 
+\node[black] at (190,100) {$4$}; 
+\node[black] at (210,100) {$3$}; 
+\node[black] at (230,100) {$6$}; 
+
+
+\node[red] at (30,10) {$3$}; 
+\node[red] at (130,40) {$8$}; 
+\node[red] at (170,70) {$4$}; 
+\node[red] at (10,100) {$4$}; 
+
+\end{tikzpicture}
+
+\end{center}
+
+$$estimate("192.168.100.20")$$
+\pause
+$$= min[4, 4, 8, 3]$$
+$$= 3$$
+
+}
+
+
+\frame
+{
+\frametitle{Count min sketch}
+
+Проблема перекоса данных, когда все ячейки в матрицы > 0.
+
+\vspace{5mm}
+
+Merge двух. Поэлементно сложить внутренний массив. Можно вычитать. 
+
+\vspace{5mm}
+
+\pause
+
+new CountMinSketch(eps, confidence)
+
+\vspace{5mm}
+
+new CountMinSketch(0.0000001, 0.9999)
+\vspace{5mm}
+
+$$d = ceil(2 / eps)$$
+$$w = ceil(-log(1 - confidence) / log(2))$$
+}
+
+\frame
+{
+\frametitle{Count min sketch. Итого}
+
+Ctor: new CountMinSketch(double eps, double confidence)
+
+\vspace{5mm}
+\pause
+
+Занимает фиксированную память.
+
+\vspace{5mm}
+\pause
+
+Вероятностно считаем количество вхождений.
+
+}
+
+
+
+\frame
+{
+\frametitle{Extra}
+
+- Is it a coincidence that 'CM' is also the initials of the authors?
+
+\pause
+
+\vspace{5mm}
+
+- Probably.
+
+\vspace{5mm}
+
+\pause
+
+
+Cormode, Graham; S. Muthukrishnan (2005). "An Improved Data Stream Summary: The Count-Min Sketch and its Applications" (PDF). J. Algorithms. 55: 29–38. doi:10.1016/j.jalgor.2003.12.001.
+
+}
+
+
+\frame
+{
+\frametitle{Design. Лайки}
+
+\begin{center}
+{\huge Design. Лайки}
+\end{center}
+}
+
+
+
+
+\frame
+{
+\frametitle{Лайки}
+
+Пользователей и объектов -- $10^9$. Проблема <<накрутки>>.
+
+\pause
+
+\vspace{5mm}
+
+Лайк -- $(userId, objectId)$. 
+
+\vspace{5mm}
+Да, BloomFilter на факт лайка/дизлайка. 
+
+Количество лайков -- классический KV, либо $CountMinSketch$.
+
+\vspace{5mm}
+
+\pause
+
+Шардинг по $objectId$ или $(userId, objectId)$.
+
+\vspace{5mm}
+
+Кто из друзей также лайкал? Естественный граф ($natural\ graph$), особенности.
+
+\vspace{5mm}
+}
+
+
+\frame
+{
+\frametitle{Design. Просмотры}
+
+\begin{center}
+{\huge Design. Просмотры}
+\end{center}
+}
+
+
+
+\frame
+{
+\frametitle{Просмотры}
+
+<<Avito>>, <<LJ>>. Хотим видеть общее количество уникальных просмотров, просмотров за 
+час/день/неделю/месяц. 
+
+\pause
+
+\vspace{5mm}
+
+$BloomFilter(userId, itemId)$, смотрел ли конкретный человек конкретное объявление. Глобальный. Количество уникальных в KV/CMS. 
+
+\vspace{5mm}
+
+На каждый квант времени (час) -- отдельный $CountMinSketch$. 
+Их можно складывать/вычитать, организовать $sliding\ window$.
+
+}
+
+
+\begin{frame}[fragile]
+\frametitle{Просмотры}
+
+Скользящее окно. Переход, а не полный пересчет.
+
+{\color{blue}
+\begin{verbatim}
+от  :     [            ]
+к   :       [            ]
+              =
+общее:      [          ] 
+переход: -[ ]         +[ ]
+\end{verbatim}
+}
+
+Каждый интервал времени -- CountMinSketch.
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Extra, overview}
+
+Обзор библиотек (guava, stream-lib, Apache Spark). Apache Druid. OLAP.
+
+\pause
+
+\begin{verbatim}
+Let me google that: 
+HyperLogLog, Bloom filter, CountMinSketch in {YOUR_PROGRAMMING_LANGUAGE}
+\end{verbatim}
+
+\pause
+
+$CountMinSketch, long[\,][\,]$
+
+\vspace{5mm}
+
+\pause
+
+Quotient filter (немного сильнее, чем Bloom filter)
+
+\vspace{5mm}
+
+(De-)Serialization (без x2, x3)
+
+\pause
+
+\vspace{5mm}
+
+Сжать данные в cookie
+
+\pause
+
+\vspace{5mm}
+
+<<Грубая сила>> всегда работает. Стоит ли?
+
+\end{frame}
+
+
+
+
+
+
+\begin{frame}[plain]
+
+      \begin{figure}
+        \includegraphics[height=0.8\textwidth]{theend.jpg}
+      \end{figure}
+\end{frame}
+
+
+\frame
+{
+      \begin{figure}
+        \includegraphics[height=0.55\textwidth]{eltcin_ustal.jpg}
+      \end{figure}
+}
+
+
+\frame
+{
+\frametitle{Q. E. D.}
+
+Спасибо!
+
+\vspace{5mm}
+
+$!?$
+
+\vspace{5mm}
+
+Можете задавать любые вопросы, но отвечу я вероятностно
+
+\vspace{5mm}
+
+
+\href{mailto:ajtkulov@gmail.com}{ajtkulov@gmail.com}
+
+\vspace{5mm}
+
+$\blacksquare$
+
+}
+
+
+
+\frame
+{
+\frametitle{Extra - 2}
+
+- *Knock Knock...*
+
+\pause
+
+\vspace{5mm}
+
+- Who is there? Is it a monad?
+
+\pause
+
+\vspace{5mm}
+
+- Maybe.
+
+}
+
+
+
+
+\end{document}
