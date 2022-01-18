@@ -1,0 +1,383 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage[russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+% \usepackage[cp1251]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage{epigraph}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{verbatimbox}
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,height=6cm,compat=1.3}
+
+\usepgflibrary{arrows}
+
+
+\usetheme{Madrid}
+
+\newcommand{\SubItem}[1]{
+    {\setlength\itemindent{15pt} \item[-] #1}
+}
+
+\newcommand*{\sele}[1]{{\bf #1}}
+\newcommand*{\sel}[1]{\textcolor{blue}{#1}}
+\newcommand*{\prob}[1]{\textcolor{magenta}{#1}}
+\newcommand*{\vs}[0]{\vspace{10pt}}
+\newcommand<>{\fullsizegraphic}[1]{
+%  \begin{textblock*}{0cm}(-1cm,-3.78cm)
+  \includegraphics[width={\paperwidth}]{#1}
+%  \end{textblock*}
+}
+
+\title[О коллаборации с Диссернет]{О коллаборации с Диссернет}
+\author{Павел Айткулов}
+\institute[]{ajtkulovp@gmail.com, Orb Intelligence / DnB}
+\date{20 Jan 2022}
+
+\begin{document}
+
+\frame{\titlepage}
+
+
+\frame
+{
+\frametitle{Диссернет}
+
+Диссернет
+\href{https://www.dissernet.org/}{https://www.dissernet.org/}
+
+
+\vspace{3mm}
+Что, Где, Когда, Начало 
+
+\vspace{3mm}
+\href{https://www.dissernet.org/expertise/andriyanovav2011.htm}{https://www.dissernet.org/expertise/andriyanovav2011.htm}
+
+
+\vspace{3mm}
+
+Сообщество, но не формальная организация.
+
+\vspace{3mm}
+
+Атаки/обвинения, не политика. 
+
+Ошибки, извинения.
+
+\vspace{1mm}
+
+\href{https://www.dissernet.org/publications/poselyugina_errata.htm}{https://www.dissernet.org/publications/poselyugina\_errata.htm}
+
+}
+
+
+
+\frame {
+  \frametitle{Тезаурус}
+
+\begin{itemize}
+  \item карбункул, нарезка. \href{https://www.dissernet.org/expertise/danilinalyu2012.htm}{https://www.dissernet.org/expertise/danilinalyu2012.htm}, \href{https://www.dissernet.org/expertise/ramazanovakk2011_.htm}{https://www.dissernet.org/expertise/ramazanovakk2011\_.htm}
+  \item ЗОЛУС, новояз (зоДлус)
+  \item ВАК, МинОбр, Диссовет
+  \item фантом 
+  \item иностранцы (<<таджики>>). Без коннотаций национализма или расизма
+  \item фабрики, Машина времени, 10 лет для срока давности
+
+\end{itemize}
+}
+
+\frame {
+  \frametitle{Плагиат}
+
+
+
+
+\begin{itemize}
+
+\item текстовый
+\item численный, табличный
+\item иной
+
+\end{itemize}
+
+Копирование текста или чисел (не идей). \par
+
+Очевидно доказывать (за исключением терВера, <<Война и мир>> с заменой 1 буквы)
+
+\vspace{5mm}
+\pause
+Зачем злодеи это делают? Списывание, торговля, криминал.
+}
+
+
+\frame {
+  \frametitle {Не только диссертации}
+
+Научные статьи, монографии
+\begin{itemize}
+  \item Множественные публикации
+  \item Самоплагиат
+  \item K-кругов ада
+  \item Перевод с других языков
+  \item П(Б)латные соавторы. Продажа места в соавторах.
+\end{itemize}
+
+Даже в отписке на ЗОЛУС. 
+
+\vspace{3mm}
+
+Патенты, судебные решения, судебные экспертизы.
+
+\vspace{3mm}
+
+Диссеропедия журналов и вузов.
+
+\vspace{3mm}
+
+Ретрагирование статьи. Хищнические журналы.
+}
+
+\frame {
+  \frametitle{Поток}
+
+Структура защиты, научрук, оппоненты, ведущая организация. Статьи в ВАК.
+
+\vspace{3mm}
+
+Кандидатская и докторская (совместные работы с учениками).
+
+\vspace{3mm}
+
+ЗОЛУС, <<родной>> vs. <<не родной>> диссовет.
+
+\vspace{3mm}
+
+Диссовет, ВАК, МинОбр (в редких случаях, на отрицательное решение Диссовета не смотрят).
+
+\vspace{3mm}
+
+VIP, Экспертный совет ВАК/МинОбр.
+
+\vspace{3mm}
+
+Фантомы.
+}
+
+\frame { 
+  \frametitle{Статистика на сегодня}
+
+  Ректоры/депутаты/остальные. Все слои населения.
+\vspace{3mm}
+  Структура по остальным специальностям (экономисты, педагоги, юристы, медики, технари) \par
+\vspace{3mm}
+  11.5К сильное подозрение, 3К экспертиз, 1000+ ЗОЛУСов. \par
+\vspace{3mm}
+  250 (из 270) ЗОЛУСов пройдено в 2021 году.
+}
+
+
+\frame {
+  \frametitle{Коллаборация}
+
+Основной ДатаСет (2M в метаданных, 1М в наличии, 600К диссертаций, 400К авторефератов, 330 Гб текста).
+О чистоте.
+\vspace{3mm}
+Временной Лаг по оцифровке
+
+\vspace{3mm}
+\begin{itemize}
+\item E-library(мало в публичном доступе, 14М)
+\item cyberleninka (2.6M статей, 200Гб текста)
+\item Web
+\end{itemize}
+\vspace{3mm}
+
+Личности: Википедия, Декларатор
+
+\vspace{3mm}
+
+Аналоги: Антиплагиат (ушли в бизнес), Врониплаг (диссертации, Германия).
+
+}
+
+\frame {
+  \frametitle{Текст}
+
+  Версия 1. длинные <<предложения>>. Хеширование, 64 бита. 500М, 10\%
+
+\vspace{3mm}
+
+  Версия 2. n-gram. 500Гб хешей. $n = 6$, размер не зависит от $n$. 20B n-gram.
+
+\vspace{3mm}
+
+  Отсекаем частотные n-gram, <<На правах рукописи, работа выполнена в>> ($freq \le 5$).
+}
+
+\frame {
+  \frametitle{Текстовый плагиат в выводах}
+
+  Штрафуется серьезнее.
+
+  \href{https://www.facebook.com/andrei.rostovtsev/posts/4305629239498604}{https://www.facebook.com/andrei.rostovtsev/posts/4305629239498604}
+
+  Выводы. Обычно такие главы начинаются с новой страницы. Отсечь библиографию.
+}
+
+\frame {
+  \frametitle{Числа}
+
+  Табличный плагиат. После OCR есть разбивка на страницы.
+\vspace{3mm}
+
+  Оставляем только нетриальные числа. 3-gram, хеширование.
+\vspace{3mm}
+
+  Страница или соседняя страница содержит подстроку <<ТАБЛИЦ>>.
+\vspace{3mm}
+
+  \href{http://wiki.dissernet.org/wsave/LiYuPN2007.html}{http://wiki.dissernet.org/wsave/LiYuPN2007.html}
+  \href{https://www.dissernet.org/expertise/melnikovaen2011.htm}{https://www.dissernet.org/expertise/melnikovaen2011.htm}
+\vspace{3mm}
+  Медики.
+}
+
+\frame {
+  \frametitle{Фуфломицины}
+  
+  Медицинская мафия. 
+
+  \href{https://ru.wikipedia.org/wiki/\%D0\%91\%D0\%B8\%D0\%BD\%D0\%B3\%D1\%81\%D1\%82\%D0\%B8}{https://ru.wikipedia.org/wiki/Бингсти}
+}
+
+
+\begin{frame}[fragile]
+  \frametitle{Фуфломицины - 2}
+  
+  Версия 1. Фиксированный список <<фуфломицинов>>. 
+
+  \begin{verbatim}
+____________ [Термин1] ____________  ----  ____________ [Термин2] ____________
+
+  \end{verbatim}
+
+Замена или добавление медицинского термина. <<Щелкает>> текстовым плагиатом в левом и правом контекстах.
+
+\vspace{3mm}
+
+Есть граф копирований. Рассматриваем только диссертации биологических, медицинских и фармацевтических наук.
+
+\vspace{3mm}
+
+Таблицы. Найдено порядка 100-150 работ.
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Фуфломицины - 3}
+  
+  Версия 2. ML для определения слова-фармакологии.
+
+  Логистическая регрессия. Общий список слов vs. аптечный каталог. (ROC AUC=0.97)
+
+
+\end{frame}
+
+\frame{
+  \frametitle{Разное}
+
+  Обновление источников
+  \href{http://wiki.dissernet.org/wsave/NikogdaYuV2013.html}{http://wiki.dissernet.org/wsave/NikogdaYuV2013.html}
+
+\vspace{3mm}
+
+  Игошенизация (<<шоколад>> $\rightarrow$ <<мясо>>)
+
+  \href{https://www.dissernet.org/expertise/igoshinin2004.htm}{https://www.dissernet.org/expertise/igoshinin2004.htm}
+
+  \par
+  
+  \href{https://ru.wikipedia.org/wiki/\%D0\%98\%D0\%B3\%D0\%BE\%D1\%88\%D0\%B8\%D0\%BD,\_\%D0\%98\%D0\%B3\%D0\%BE\%D1\%80\%D1\%8C\_\%D0\%9D\%D0\%B8\%D0\%BA\%D0\%BE\%D0\%BB\%D0\%B0\%D0\%B5\%D0\%B2\%D0\%B8\%D1\%87}{https://ru.wikipedia.org/wiki/Игошин,\_Игорь\_Николаевич}
+
+
+}
+
+\frame{
+  \frametitle{Разное - 2}
+  \href{https://www.facebook.com/serguei.parkhomenko/posts/10225243601346536?comment\_id=10225244642012552}{https://www.facebook.com/serguei.parkhomenko/posts/10225243601346536?comment\_id=10225244642012552}
+
+  \href{https://www.facebook.com/andrei.rostovtsev/posts/4347241862004008}{https://www.facebook.com/andrei.rostovtsev/posts/4347241862004008}
+
+  \href{https://www.facebook.com/andrei.rostovtsev/posts/4342907015770826}{https://www.facebook.com/andrei.rostovtsev/posts/4342907015770826}
+
+  \href{https://novayagazeta.ru/articles/2016/11/02/70390-biblioteka-s-privideniyami}{https://novayagazeta.ru/articles/2016/11/02/70390-biblioteka-s-privideniyami}
+
+}
+
+
+\frame {
+  \frametitle{Дополнительно}
+  \href{https://ru.wikipedia.org/wiki/\%D0\%9A\%D0\%BE\%D0\%BC\%D0\%B8\%D1\%81\%D1\%81\%D0\%B8\%D1\%8F\_\%D0\%BF\%D0\%BE\_\%D0\%B1\%D0\%BE\%D1\%80\%D1\%8C\%D0\%B1\%D0\%B5\_\%D1\%81\_\%D0\%BB\%D0\%B6\%D0\%B5\%D0\%BD\%D0\%B0\%D1\%83\%D0\%BA\%D0\%BE\%D0\%B9}{https://ru.wikipedia.org/wiki/Комиссия\_по\_борьбе\_с\_лженаукой}
+
+  \href{https://ru.wikipedia.org/wiki/\%D0\%9A\%D0\%BE\%D0\%BC\%D0\%B8\%D1\%81\%D1\%81\%D0\%B8\%D1\%8F\_\%D0\%BF\%D0\%BE\_\%D0\%BF\%D1\%80\%D0\%BE\%D1\%82\%D0\%B8\%D0\%B2\%D0\%BE\%D0\%B4\%D0\%B5\%D0\%B9\%D1\%81\%D1\%82\%D0\%B2\%D0\%B8\%D1\%8E\_\%D1\%84\%D0\%B0\%D0\%BB\%D1\%8C\%D1\%81\%D0\%B8\%D1\%84\%D0\%B8\%D0\%BA\%D0\%B0\%D1\%86\%D0\%B8\%D0\%B8\_\%D0\%BD\%D0\%B0\%D1\%83\%D1\%87\%D0\%BD\%D1\%8B\%D1\%85\_\%D0\%B8\%D1\%81\%D1\%81\%D0\%BB\%D0\%B5\%D0\%B4\%D0\%BE\%D0\%B2\%D0\%B0\%D0\%BD\%D0\%B8\%D0\%B9}{https://ru.wikipedia.org/wiki/Комиссия\_по\_противодействию\_\\ фальсификации\_научных\_исследований}
+
+  Увы, у академии мало влияния на государство и процессы. Все в обратную сторону.
+
+\vspace{3mm}
+
+Нет доступа до монографий, статей и диссертаций. Текущий датасет - удача, что в пандемию РГБ не надолго <<ошибочно выложили>> в открытый доступ. Список МинОбра о существующих защитах, 
+}
+
+\frame {
+  \frametitle {VIP}
+
+  Wikipedia - 400K имен, известные и популярные, вся история, пересечения по ФИО, 50\% попаданий.
+
+  Декларатор - 300К имен, кто обязан сдавать декларации о доходах, в том числе работник районной налоговой инспекции.
+
+\vspace{3mm}
+  Спортсмены, политики, Контр-адмирал, генералы ФСБ, учителя английского, врачи, губернаторы.
+
+\vspace{3mm}
+  \href{https://www.dissernet.org/expertise/kozlovsv2006.htm}{https://www.dissernet.org/expertise/kozlovsv2006.htm}
+  \href{https://ru.wikipedia.org/wiki/\%D0\%9A\%D0\%BE\%D0\%BD\%D1\%82\%D1\%80-\%D0\%B0\%D0\%B4\%D0\%BC\%D0\%B8\%D1\%80\%D0\%B0\%D0\%BB}{https://ru.wikipedia.org/wiki/Контр-адмирал}
+  \href{https://ru.wikipedia.org/wiki/\%D0\%9A\%D0\%BE\%D0\%B7\%D0\%BB\%D0\%BE\%D0\%B2,\_\%D0\%A1\%D0\%B5\%D1\%80\%D0\%B3\%D0\%B5\%D0\%B9\_\%D0\%92\%D0\%B8\%D0\%BA\%D1\%82\%D0\%BE\%D1\%80\%D0\%BE\%D0\%B2\%D0\%B8\%D1\%87}{https://ru.wikipedia.org/wiki/Козлов,\_Сергей\_Викторович}
+
+\vspace{3mm}
+
+  Прогоны по кандидатам в ГД РФ.  
+}
+
+
+\frame{
+  \frametitle{Итоги}
+
+\begin{itemize}
+  \item Текстовый плагиат (n-gram), диссертации, КиберЛенинка.
+
+  \item Текстовый плагиат, выводы
+
+  \item Табличный плагиат
+
+  \item 
+
+  \item Фуфломицины
+\end{itemize}
+  На март 2021 года было 7.5К (2013-2021 годы) подозрений, на январь 2022 - 11.1К. Основные фабрики уже были найдены.
+
+\vspace{3mm}
+  2012 год покрыт, 1250 потенциальных ЗОЛУСОВ. За 2013-2021 подано 1000+ ЗОЛУСов. 
+\vspace{3mm}
+
+  Медленно и верно покрываем все, с приоритетом на ЗОЛУСы и срок давности, для 2000-2010 малое покрытие.
+
+}
+
+
+
+
+\end{document}
