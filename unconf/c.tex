@@ -1,0 +1,303 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage[russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[cp1251]{inputenc}
+% \usepackage[utf8]{inputenc}
+\usepackage{epigraph}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{verbatimbox}
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,height=6cm,compat=1.3}
+
+\usepgflibrary{arrows}
+
+
+\usetheme{Madrid}
+
+\newcommand*{\sele}[1]{{\bf #1}}
+\newcommand*{\sel}[1]{\textcolor{blue}{#1}}
+\newcommand*{\prob}[1]{\textcolor{magenta}{#1}}
+\newcommand*{\vs}[0]{\vspace{10pt}}
+\newcommand<>{\fullsizegraphic}[1]{
+%  \begin{textblock*}{0cm}(-1cm,-3.78cm)
+  \includegraphics[width={\paperwidth}]{#1}
+%  \end{textblock*}
+}
+
+\title[Hirsch index for OSS, Unconf, $\lambda$-conf]{Hirsch index for OSS}
+\author{Pavel Aitkulov}
+\institute[]{ajtkulov@gmail.com}
+\date{May 13, 2025}
+
+\begin{document}
+
+
+\frame{\titlepage}
+
+\frame
+{
+\frametitle{Bigger}
+\begin{center}
+  \textbf{6 > 4}
+\end{center}
+}
+
+
+
+\frame
+{
+\frametitle{Better?}
+\begin{center}
+  6 ? 4
+
+\pause
+
+  It depends
+
+\end{center}
+}
+
+\frame
+{
+\frametitle{Lattice, partial order}
+\begin{center}
+  banana ? apple
+
+\pause
+
+  'banana' > 'apple'
+
+\pause
+
+  banana ? Sunday
+
+\pause 
+
+  multidimensional, embeddings  
+
+\end{center}
+}
+
+
+\frame
+{
+\frametitle{We want to hire best engineers!}
+\begin{enumerate}
+  \item Lines of code
+  \item Commits
+  \item PR
+  \item Resolved issues
+  \item Different projects
+  \pause
+  \item Not an asshole
+  \pause
+  \item For a little money, and fire them in one day
+\end{enumerate}
+}
+
+
+\frame
+{
+\frametitle{In sport}
+\begin{center}
+    \includegraphics[height=0.4\textwidth]{elo.jpg} 
+ \end{center}
+}
+
+\frame
+{
+\frametitle{In math}
+\begin{center}
+    \includegraphics[height=0.4\textwidth]{erdos.jpg} 
+ \end{center}
+}
+
+\frame
+{
+\frametitle{In ...}
+\begin{center}
+    \includegraphics[height=0.4\textwidth]{bacon.jpg} 
+ \end{center}
+}
+
+\frame
+{
+\frametitle{In ...}
+\begin{center}
+    Combination of Erd{\"o}s + Bacon + ...
+ \end{center}
+}
+
+
+\frame
+{
+\frametitle{In science}
+\begin{center}
+    \includegraphics[height=0.4\textwidth]{hindex.png} 
+ \end{center}
+
+ Strong correlation between H-index and Nobel Prize winners.
+}
+
+
+
+\frame
+{
+\frametitle{OSS index, demo}
+\href{https://stats.getprog.ai/git?profile=jdegoes}{https://stats.getprog.ai/git?profile=jdegoes}
+
+
+\href{http://localhost:3000/jdegoes}{http://localhost:3000/jdegoes}
+
+\href{https://hirsch-ui.vercel.app/github/torvalds}{https://hirsch-ui.vercel.app/github/torvalds}
+
+\href{https://stats.getprog.ai/repo?repo=apache/spark}{https://stats.getprog.ai/repo?repo=apache/spark}
+
+\vspace{10pt}
+\pause
+Github stats: 7M non trivial H-index, 400M repos, 120M profiles
+
+}
+
+\frame
+{
+\frametitle{OSS index doesn't mean ...}
+\begin{center}
+\includegraphics[height=0.5\textwidth]{crazyitparty.jpg} 
+\end{center}
+}
+
+
+\frame
+{
+\frametitle{OSS index, weird}
+\href{https://www.npmjs.com/package/is-number}{https://www.npmjs.com/package/is-number}
+\vspace{10pt}
+72M downloads weekly
+}
+
+
+
+
+\frame
+{
+\frametitle{Fake it till ...}
+\href{https://arxiv.org/pdf/2412.13459}{https://arxiv.org/pdf/2412.13459}
+\vspace{10pt}
+4.5 Million (Suspected) Fake Stars in GitHub:
+A Growing Spiral of Popularity Contests, Scams, and Malware 
+}
+
+\frame
+{
+\frametitle{Fake it till ...}
+\begin{enumerate}
+\item Skripal poisoning case, March 2018
+\item Downloads, views, likes, stars (top instagram post)
+\item H-index
+\item Citations
+\end{enumerate}
+}
+
+\frame
+{
+\frametitle{Threat}
+\begin{enumerate}
+\item Fake libs in Maven Central \href{https://mvnrepository.com/artifact/com.pvful/cats-effect\_sjs1\_3/5.1}{https://mvnrepository.com/artifact/com.pvful/cats-effect\_sjs1\_3/5.1} and \href{https://mvnrepository.com/artifact/com.typesafe.akka/shapeless\_2.9.2/1.9}{https://mvnrepository.com/artifact/com.typesafe.akka/shapeless\_2.9.2/1.9} [404 both]
+\item Fake accounts on Github, Linkedin, botnets
+\item What if I get access to \href{https://www.npmjs.com/package/is-number}{https://www.npmjs.com/package/is-number} [70M] and add malicious code?
+\item What if I bought a fake Github stars for competitors
+\end{enumerate}
+}
+
+
+\frame
+{
+\frametitle{Data}
+\begin{enumerate}
+  \item Github
+  \item Stackoverflow
+  \item Linkedin
+  \item Kaggle
+  \item Maven Central, Pypi, NPM
+  \item DockerHub (I know the link)
+\end{enumerate}
+}
+
+
+
+\frame
+{
+\frametitle{About myself}
+\begin{enumerate}
+  \item H-index = 1
+  \item OSS H-index = 0
+  \item Marathon PB = 3h22m
+  \item Chess Elo (lichess.org, blitz, highest) = 2118
+  \pause
+  \item Bacon + Adult film = 0, in my hope
+\end{enumerate}
+}
+
+\frame
+{
+\frametitle{About others}
+\begin{enumerate}
+  \item Demis Hassabis
+  \item Martin Odersky
+  \item John M. Jumper
+  \item Matei Zaharia
+\end{enumerate}
+}
+
+
+
+\frame
+{
+\frametitle{Conclusion}
+\begin{enumerate}
+  \item Comparison of high-dimensional things is hard and wrong
+  \pause
+  \item Classes, be alike - better
+  \pause
+  \item you can fake a lot
+  \item faking everyting is expensive
+  \pause
+  \item some animals are more equal than others
+  \pause
+  \item some repos are more equal than others
+  \pause
+  \item punish bad guys, appreciate good one
+  \pause
+  \item to filter out an asshole is hard problem
+\end{enumerate}
+}
+
+\frame
+{
+\frametitle{That's all}
+\begin{center}
+    \includegraphics[height=0.4\textwidth]{folks.png} 
+ \end{center}
+}
+
+\frame
+{
+\frametitle{Actually not, Quiz}
+\begin{center}
+    \includegraphics[height=0.4\textwidth]{erdos.jpg} 
+    \includegraphics[height=0.4\textwidth]{godel.jpg} 
+    \includegraphics[height=0.4\textwidth]{comb.jpg} 
+ \end{center}
+}
+
+
+
+
+\end{document}
+
+
