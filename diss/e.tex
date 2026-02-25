@@ -1,0 +1,976 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage[russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+% \usepackage[cp1251]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage{epigraph}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{verbatimbox}
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,height=6cm,compat=1.3}
+\usepackage{pgfplots} 
+\usepgflibrary{arrows}
+
+
+\usetheme{Madrid}
+
+\newcommand{\SubItem}[1]{
+    {\setlength\itemindent{15pt} \item[-] #1}
+}
+
+\newcommand*{\sele}[1]{{\bf #1}}
+\newcommand*{\sel}[1]{\textcolor{blue}{#1}}
+\newcommand*{\prob}[1]{\textcolor{magenta}{#1}}
+\newcommand*{\vs}[0]{\vspace{10pt}}
+\newcommand<>{\fullsizegraphic}[1]{
+%  \begin{textblock*}{0cm}(-1cm,-3.78cm)
+  \includegraphics[width={\paperwidth}]{#1}
+%  \end{textblock*}
+}
+
+\title[Dissernet]{Dissernet}
+\author{Pavel Aitkulov}
+\institute[]{ajtkulov@gmail.com}
+\date{03 Mar 2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+
+
+\frame
+{
+\frametitle{Dissernet}
+
+\href{https://www.dissernet.org/}{https://www.dissernet.org/}
+
+\vspace{3mm}
+
+Looking for criminals in the scientific community.
+
+\vspace{3mm}
+
+Patient Zero?
+
+
+
+\vspace{3mm}
+\href{https://dissernet.org/expertise/AndriyanovAV2011}{https://dissernet.org/expertise/AndriyanovAV2011}
+
+
+\vspace{3mm}
+
+Community, but not a formal organization.
+
+\vspace{3mm}
+
+\pause
+
+No politics. Quis custodiet ipsos custodes?
+
+\vspace{3mm}
+
+Errors, apologies.
+
+\vspace{1mm}
+
+\href{https://dissernet.org/news/my_prinosim_izvineniya_ol_ge_borisovne_poselyuginoy}{https://dissernet.org/news/my\_prinosim\_izvineniya\_ol\_ge\_borisovne\_poselyuginoy}
+
+}
+
+
+\frame {
+  \frametitle{Number of metadata and files of dissertations}
+
+  \begin{tikzpicture}
+
+  \pgfplotstableread[row sep=\\,col sep=&]{
+    interval  & allD  & allEx \\
+    1995      & 10234 & 777   \\
+    1996      & 10589 & 1100  \\
+    1997      & 12269 & 3137  \\
+    1998      & 14993 & 10588 \\
+    1999      & 17503 & 17125 \\
+    2000      & 21282 & 21027 \\
+    2001      & 16986 & 16795 \\
+    2002      & 23371 & 23166 \\
+    2003      & 24454 & 24270 \\
+    2004      & 33346 & 33162 \\
+    2005      & 33131 & 32926 \\
+    2006      & 35250 & 35010 \\
+    2007      & 27581 & 27009 \\
+    2008      & 23793 & 23304 \\
+    2009      & 29845 & 29303 \\
+    2010      & 24051 & 23628 \\
+    2011      & 26124 & 25502 \\
+    2012      & 21321 & 20357 \\
+    2013      & 21712 & 20760 \\
+    2014      & 13064 & 12548 \\
+    2015      & 14843 & 13002 \\
+    2016      & 11926 & 10043 \\
+    2017      & 11056 & 10252 \\
+    2018      & 10880 & 10541 \\
+    2019      & 9599  & 9121  \\
+    2020      & 7968  & 6168  \\
+    }\mydata
+ 
+    \begin{axis}[
+            ybar,
+            bar width=.06cm,
+            scaled y ticks=false,
+            x tick label style = {font = \small, text width = 1.7cm, align = center, rotate = 70, anchor = north east},
+            symbolic x coords={1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 
+            2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020},
+            xtick=data,
+            width=15cm, height=7cm
+        ]
+        \addplot table[x=interval,y=allD]{\mydata};
+        \addplot table[x=interval,y=allEx]{\mydata};
+        \legend{MetaData, File};
+    \end{axis} 
+\end{tikzpicture}
+
+}
+
+
+\frame {
+  \frametitle{Economists vs. Engineers}
+
+  \begin{tikzpicture}
+
+  \pgfplotstableread[row sep=\\,col sep=&]{
+    interval  & allE & allT & allM \\
+    1995      & 949  & 2215 & 1366 \\
+    1996      & 1136 & 2295 & 1281 \\
+    1997      & 1336 & 2534 & 1424 \\
+    1998      & 1786 & 3170 & 1621 \\
+    1999      & 2474 & 3627 & 1526 \\
+    2000      & 3419 & 4398 & 1594 \\
+    2001      & 2581 & 3301 & 1275 \\
+    2002      & 3783 & 4341 & 1500 \\
+    2003      & 4178 & 3979 & 1436 \\
+    2004      & 5458 & 4942 & 1728 \\
+    2005      & 5208 & 4606 & 1589 \\
+    2006      & 5922 & 5181 & 1822 \\
+    2007      & 4668 & 4282 & 1463 \\
+    2008      & 3729 & 3391 & 1422 \\
+    2009      & 4599 & 4450 & 1501 \\
+    2010      & 3826 & 3813 & 1555 \\
+    2011      & 4098 & 4340 & 1596 \\
+    2012      & 3685 & 3902 & 1346 \\
+    2013      & 2822 & 4407 & 1536 \\
+    2014      & 1590 & 2578 & 1154 \\
+    2015      & 1630 & 2814 & 1095 \\
+    2016      & 936  & 2524 & 1142 \\
+    2017      & 735  & 2204 & 921  \\
+    2018      & 700  & 2250 & 953  \\
+    2019      & 637  & 2006 & 804  \\
+    2020      & 544  & 1634 & 637  \\
+    }\mydata
+ 
+    \begin{axis}[
+            ybar,
+            bar width=.06cm,
+            scaled y ticks=false,
+            x tick label style = {font = \small, text width = 1.7cm, align = center, rotate = 70, anchor = north east},
+            symbolic x coords={1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 
+            2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020},
+            xtick=data,
+            width=15cm, height=7cm
+        ]
+        \addplot table[x=interval,y=allE]{\mydata};
+        \addplot table[x=interval,y=allT]{\mydata};
+        \addplot table[x=interval,y=allM]{\mydata};
+        \legend{Economy, Tech, Physical and mathematical};
+    \end{axis} 
+\end{tikzpicture}
+
+}
+
+\frame {
+  \frametitle{Candidates vs. Doctors of Science}
+
+  \begin{tikzpicture}
+
+  \pgfplotstableread[row sep=\\,col sep=&]{
+    interval  & allD & allP \\
+    1995      & 1948 & 8282 \\
+    1996      & 2019 & 8565 \\
+    1997      & 2514 & 9749 \\
+    1998      & 2896 & 12088 \\
+    1999      & 3077 & 14420 \\
+    2000      & 3165 & 18110 \\
+    2001      & 2718 & 14259 \\
+    2002      & 3036 & 20322 \\
+    2003      & 3269 & 21174 \\
+    2004      & 4149 & 29183 \\
+    2005      & 3915 & 27761 \\
+    2006      & 4144 & 31096 \\
+    2007      & 2989 & 24580 \\
+    2008      & 2426 & 21350 \\
+    2009      & 3653 & 26165 \\
+    2010      & 2770 & 21273 \\
+    2011      & 3260 & 22852 \\
+    2012      & 2706 & 18610 \\
+    2013      & 2379 & 19329 \\
+    2014      & 1600 & 11448 \\
+    2015      & 1861 & 12970 \\
+    2016      & 1439 & 10485 \\
+    2017      & 1374 & 9680 \\
+    2018      & 1393 & 9479 \\
+    2019      & 1238 & 8339 \\
+    2020      & 1034 & 6927 \\
+    }\mydata
+ 
+    \begin{axis}[
+            ybar,
+            bar width=.06cm,
+            scaled y ticks=false,
+            x tick label style = {font = \small, text width = 1.7cm, align = center, rotate = 70, anchor = north east},
+            symbolic x coords={1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 
+            2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020},
+            xtick=data,
+            width=15cm, height=7cm
+        ]
+        \addplot table[x=interval,y=allD]{\mydata};
+        \addplot table[x=interval,y=allP]{\mydata};
+        \legend{Dr of Science, Phd};
+    \end{axis} 
+\end{tikzpicture}
+
+}
+
+
+\frame {
+  \frametitle{Thesaurus}
+
+\begin{itemize}
+  \item Carbuncul, rag blanket. \href{https://dissernet.org/expertise/DanilinaLYu2012}{https://dissernet.org/expertise/DanilinaLYu2012}, \href{https://www.dissernet.org/expertise/RamazanovaKK2011}{https://www.dissernet.org/expertise/RamazanovaKK2011}
+  \item ZOLUS, new word (Zodlus)
+  \item VAK (Higher Attestation Committee/HAC), Ministry of Education, Dissertation Council
+  \item phantom 
+  \item factories, Time Machine, 10 years for the period of validity and after 2010
+
+\end{itemize}
+}
+
+\frame {
+  \frametitle{Plagiarism}
+
+
+
+
+\begin{itemize}
+
+\item textual
+\item numerical, tabular
+\item other
+
+\end{itemize}
+
+Copying text or numbers, but not ideas. \par
+
+Obviously to prove, probabilities, <<War and Peace>> with the replacement of 1 letter.
+
+\vspace{1mm}
+{\color{blue}{
+<<Barack Obama visited Tokyo on September 18th with a working visit.>>
+
+\vspace{1mm}
+
+<<The President of the United States will visit the capital of Japan at the beginning of the next week.>>
+}}
+\vspace{5mm}
+\pause
+
+Why do the villains do this? Copying, trading, crime, promotion.
+}
+
+
+\frame {
+  \frametitle {Not only dissertations}
+
+Scientific articles, monographs
+\begin{itemize}
+  \item Multiple publications
+  \item Self-plagiarism
+  \item K-circle of hell
+  \item Translation from other languages
+  \item Paid co-authors, selling place in co-authors.
+\end{itemize}
+
+\pause
+
+Even in the ZOLUS rejection. 
+
+\vspace{3mm}
+
+Patents, court decisions, court expertises.
+
+\vspace{3mm}
+
+Disseropedia of journals and universities.
+
+\vspace{3mm}
+
+Retraction of article. Predatory journals. Paper mill.
+
+\vspace{3mm}
+
+\pause
+
+Trading links, H-index boosting.
+}
+
+\frame {
+  \frametitle{Flow}
+
+Structure of defense, supervisor, opponents, leading organization. Articles in VAK.
+
+\vspace{3mm}
+
+Candidate and doctorate (joint work with students).
+
+\vspace{3mm}
+
+ZOLUS, <<native>> vs. <<foreign>> dissertation council.
+
+\vspace{3mm}
+
+Dissertation council, VAK, Ministry of Education (in rare cases, the dissertation council does not look at the negative decision).
+
+\vspace{3mm}
+
+VIP, Expert Council of VAK/Ministry of Education.
+
+\vspace{3mm}
+
+Phantoms.
+}
+
+\frame { 
+  \frametitle{Statistics}
+
+  Rectors/deputies/others. All layers of the population.
+\vspace{3mm}
+  Structure by other specialties (economists, teachers, lawyers, doctors, engineers) \par
+\vspace{3mm}
+  14K strong suspicion, 3K expertises, 2000+ ZOLUSes. \par
+\vspace{3mm}
+  250 (from 270) ZOLUSes passed in 2021. 90\% ZOLUSes satisfied.
+}
+
+
+\frame {
+  \frametitle{Collaboration}
+
+Main Data Set (2M in metadata, 1M in existence, 600K dissertations, 400K auto-reprints, 330 GB text).
+On purity.
+\vspace{3mm}
+Time lag by digitization
+
+\vspace{3mm}
+\begin{itemize}
+\item E-library(a small portion in public access, 14M)
+\item cyberleninka (3.5M articles, 200GB text)
+\item shadow libraries
+\ 
+\item Web
+\end{itemize}
+\vspace{3mm}
+
+Personalities: Wikipedia, Declarator
+
+\vspace{3mm}
+
+Similarities: Antiplagiat (commercial, tied with government), Vroniplag (dissertations, Germany).
+
+}
+
+\frame {
+  \frametitle{Text}
+
+  Version 1. long <<sentences>>. Hashing, 64 bits. 500M, sampling 10\%
+
+\pause
+
+\vspace{3mm}
+
+  Version 2. n-gram. 500GB hashes. $n = 6$, size does not depend on $n$. 20B n-gram.
+
+\vspace{3mm}
+
+  Discard frequent n-grams, <<On the rights of the author, the work is performed in>> ($freq \le 5$).
+}
+
+\frame {
+  \frametitle{Text plagiarism in the conclusions}
+
+  Punished more severely.
+
+  \href{https://www.facebook.com/andrei.rostovtsev/posts/4305629239498604}{https://www.facebook.com/andrei.rostovtsev/posts/4305629239498604}
+
+  \href{https://www.dissernet.org/expertise/MirzaevSB2012}{https://www.dissernet.org/expertise/MirzaevSB2012}
+
+
+  Conclusions. Usually such chapters start on a new page. Remove the bibliography.
+}
+
+\frame {
+  \frametitle{Numbers}
+
+  Tabular plagiarism. After OCR, there is a breakdown into pages.
+\vspace{3mm}
+
+  We keep only non-trivial numbers. 3-gram, hashing.
+\vspace{3mm}
+
+  The page or the adjacent page contains the substring <<TABLE>>.
+\vspace{3mm}
+
+  \href{http://wiki.dissernet.org/wsave/LiYuPN2007.html}{http://wiki.dissernet.org/wsave/LiYuPN2007.html}
+  \href{https://dissernet.org/expertise/MelnikovaEN2011}{https://dissernet.org/expertise/MelnikovaEN2011}
+
+\vspace{3mm}
+
+  Doctors/MD.
+}
+
+
+\frame {
+  \frametitle{Numbers with plagiarism}
+
+  We run through the graph of textual copying. We compare tables pairwise with consideration of the editorial distance. 2-gram, separately for tables with $\pm$.
+
+\vspace{3mm}
+
+About 20 cases of data manipulation and 200+ thefts were found.
+
+\pause
+
+\vspace{3mm}
+
+\href{http://wiki.dissernet.org/wsave/BulatovRN2018.html}{http://wiki.dissernet.org/wsave/BulatovRN2018.html}
+\footnote{replaces the last digits in the results of the study everywhere with one}
+\vspace{1mm}
+\href{http://wiki.dissernet.org/wsave/DmitrenkoGD2014.html}{http://wiki.dissernet.org/wsave/DmitrenkoGD2014.html}
+\footnote{2-nd table. Values and errors change by 0.1 (large values - by 0.2 and 0.3)}
+\vspace{1mm}
+\href{http://wiki.dissernet.org/wsave/ParamonovYuO2019.html}{http://wiki.dissernet.org/wsave/ParamonovYuO2019.html}
+\footnote{Adding "0.1" to the measurements, errors are left unchanged.}
+\href{http://wiki.dissernet.org/wsave/BalikoevaFR2013.html}{http://wiki.dissernet.org/wsave/BalikoevaFR2013.html}
+\footnote{All errors are increased/decreased by 0.2. The values of measurements in the 1st and 4th row are changed by 0.12. In the 2nd and 5th row - by 0.09 In the 3rd and 6th row - 1.2}
+}
+
+
+\frame {
+  \frametitle{Fuflo-mics/homeopathy, medical fraud}
+  
+  Medical fraud. 
+
+  \href{https://ru.wikipedia.org/wiki/\%D0\%91\%D0\%B8\%D0\%BD\%D0\%B3\%D1\%81\%D1\%82\%D0\%B8}{https://ru.wikipedia.org/wiki/Бингсти}
+}
+
+
+\begin{frame}[fragile]
+  \frametitle{Fuflo-mics/homeopathy - 2}
+  
+  Version 1. Fixed list of <<fuflo-mics>>. 
+
+  \begin{verbatim}
+____________ [Term1] ____________ <----> ____________ [Term2] ____________
+
+  \end{verbatim}
+
+Replacement or addition of a medical term. <<Clicks>> textual plagiarism in the left and right contexts.
+
+\vspace{3mm}
+
+\pause
+
+There is a graph of copying. We consider only dissertations in biological, medical and pharmaceutical sciences.
+
+\vspace{3mm}
+
+About 100-150 works were found.
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Fuflo-mics/homeopathy - 3}
+  
+  Version 2. ML for determining the word-pharmacy.
+
+  Logistic regression. General list of words vs. pharmacy catalog. (ROC AUC=0.97)
+
+
+\end{frame}
+
+\frame {
+  \frametitle {VIP, known and popular personalities}
+
+  Wikipedia - 400K names, known and popular, entire history, intersections by last/first name, 50\% hits.
+
+  Declarator - 300K names, who are obliged to submit declarations of income, including a worker of the local tax inspection.
+
+\vspace{3mm}
+  Sportsmen, politicians, Counter-admiral, generals of the FSB, English teachers, doctors, governors.
+
+\pause
+
+\vspace{3mm}
+  \href{https://dissernet.org/expertise/KozlovSV2006}{https://dissernet.org/expertise/KozlovSV2006}
+  \href{https://ru.wikipedia.org/wiki/\%D0\%9A\%D0\%BE\%D0\%BD\%D1\%82\%D1\%80-\%D0\%B0\%D0\%B4\%D0\%BC\%D0\%B8\%D1\%80\%D0\%B0\%D0\%BB}{https://ru.wikipedia.org/wiki/Контр-адмирал}
+  \href{https://ru.wikipedia.org/wiki/\%D0\%9A\%D0\%BE\%D0\%B7\%D0\%BB\%D0\%BE\%D0\%B2,\_\%D0\%A1\%D0\%B5\%D1\%80\%D0\%B3\%D0\%B5\%D0\%B9\_\%D0\%92\%D0\%B8\%D0\%BA\%D1\%82\%D0\%BE\%D1\%80\%D0\%BE\%D0\%B2\%D0\%B8\%D1\%87}{https://ru.wikipedia.org/wiki/Козлов,\_Сергей\_Викторович}
+
+\vspace{3mm}
+
+  Runs by candidates in the Duma of Russia. About 20\% hits.
+}
+
+\frame {
+  \frametitle {VIP, quiz, known and popular personalities}
+
+  \begin{itemize}
+    \item 1997, 45 years, candidate, economics
+
+    \item 1998, 38 years, candidate, economics
+
+    \item 2000, 59 years, candidate, economics
+
+\pause
+
+    \item all from the same council
+
+\pause
+
+    \item 2010, 69 years (the same person), doctorate, economics
+
+\pause
+
+    \item in 2021 <<scientist>> (formally, the connection is more difficult) became a billionaire in dollars (\$1.5 billion) \href{https://www.svoboda.org/a/31190795.html}{https://www.svoboda.org/a/31190795.html}
+
+\pause
+    \item all from St. Petersburg, Russia
+
+  \end{itemize}
+
+\pause
+
+Correct answers: 
+
+\href{
+https://ru.wikipedia.org/wiki/Литвиненко,\_Владимир\_Стефанович}{https://ru.wikipedia.org/wiki/Литвиненко,\_Владимир\_Стефанович}
+
+\vspace{3mm}
+
+Plagiarism has not been found. It is unlikely that it exists.
+
+}
+
+\frame {
+  \frametitle{}
+
+  \begin{figure}
+  \includegraphics[height=0.6\textwidth]{diss_appoc.jpg}
+\end{figure}
+}
+
+
+
+\frame{
+  \frametitle{Miscellaneous}
+
+  Update of sources
+  \href{http://wiki.dissernet.org/wsave/NikogdaYuV2013.html}{http://wiki.dissernet.org/wsave/NikogdaYuV2013.html}
+
+\pause
+
+\vspace{3mm}
+
+  Igoshinization (<<chocolate>> $\rightarrow$ <<meat>>)
+
+  \href{https://dissernet.org/expertise/IgoshinIN2004}{https://dissernet.org/expertise/IgoshinIN2004}
+
+  \par
+  
+  \href{https://ru.wikipedia.org/wiki/\%D0\%98\%D0\%B3\%D0\%BE\%D1\%88\%D0\%B8\%D0\%BD,\_\%D0\%98\%D0\%B3\%D0\%BE\%D1\%80\%D1\%8C\_\%D0\%9D\%D0\%B8\%D0\%BA\%D0\%BE\%D0\%BB\%D0\%B0\%D0\%B5\%D0\%B2\%D0\%B8\%D1\%87}{https://ru.wikipedia.org/wiki/Игошин,\_Игорь\_Николаевич}
+}
+
+\frame {
+  \frametitle{Cases}
+
+  \begin{tikzpicture}
+
+  \pgfplotstableread[row sep=\\,col sep=&]{
+    interval  & allE & allT \\
+    1995      & 1    & 1 \\
+    1996      & 4    & 5 \\
+    1997      & 3    & 4 \\
+    1998      & 8    & 10 \\
+    1999      & 72   & 86 \\
+    2000      & 124  & 155 \\
+    2001      & 132  & 155 \\
+    2002      & 256  & 315 \\
+    2003      & 438  & 499 \\
+    2004      & 806  & 864 \\
+    2005      & 942  & 1005 \\
+    2006      & 1255 & 1350 \\
+    2007      & 1033 & 1144 \\
+    2008      & 832  & 929 \\
+    2009      & 985  & 1101 \\
+    2010      & 864  & 991 \\
+    2011      & 1436 & 1667 \\
+    2012      & 812  & 1325 \\
+    2013      & 184  & 388 \\
+    2014      & 79   & 142 \\
+    2015      & 53   & 102 \\
+    2016      & 22   & 47 \\
+    2017      & 13   & 31 \\
+    2018      & 0    & 20 \\
+    2019      & 0    & 16 \\
+    2020      & 0    & 4 \\
+    }\mydata
+ 
+    \begin{axis}[
+            ybar,
+            bar width=.06cm,
+            scaled y ticks=false,
+            x tick label style = {font = \small, text width = 1.7cm, align = center, rotate = 70, anchor = north east},
+            symbolic x coords={1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 
+            2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020},
+            xtick=data,
+            width=15cm, height=7cm
+        ]
+        \addplot table[x=interval,y=allE]{\mydata};
+        \addplot table[x=interval,y=allT]{\mydata};
+        \legend{Mar 2021, Aug 2022};
+    \end{axis} 
+\end{tikzpicture}
+
+}
+
+
+\frame{
+  \frametitle{Miscellaneous - 2}
+  \href{https://www.facebook.com/serguei.parkhomenko/posts/10225243601346536?comment\_id=10225244642012552}{https://www.facebook.com/serguei.parkhomenko/posts/10225243601346536?comment\_id=10225244642012552}
+
+  \href{https://www.facebook.com/andrei.rostovtsev/posts/4347241862004008}{https://www.facebook.com/andrei.rostovtsev/posts/4347241862004008}
+
+  \href{https://www.facebook.com/andrei.rostovtsev/posts/4342907015770826}{https://www.facebook.com/andrei.rostovtsev/posts/4342907015770826}
+
+  \href{https://novayagazeta.ru/articles/2016/11/02/70390-biblioteka-s-privideniyami}{https://novayagazeta.ru/articles/2016/11/02/70390-biblioteka-s-privideniyami}
+
+  \href{https://novayagazeta.ru/articles/2021/04/22/dissertatsii-oborotni-v-biblioteke-s-privideniiami}{https://novayagazeta.ru/articles/2021/04/22/dissertatsii-oborotni-v-biblioteke-s-privideniiami}
+
+}
+
+
+\frame{
+  \frametitle{Miscellaneous - 3}
+
+  \href{https://dissernet.org/expertise/BogunovSS2012}{https://dissernet.org/expertise/BogunovSS2012}
+
+  \href{https://dissernet.org/expertise/RozhnikovskijAR2007}{https://dissernet.org/expertise/RozhnikovskijAR2007}
+
+  \href{https://www.facebook.com/andrei.rostovtsev/posts/pfbid029QK8S9cCDtikad9W7GUk2Fux7PULVZmoSZE35duUUXrH32xyY2uWFRU4TPUpyqojl}{https://www.facebook.com/andrei.rostovtsev/posts/pfbid029QK8S9...}
+
+  \href{https://dissernet.org/expertise/MurahovskyAG2013}{https://dissernet.org/expertise/MurahovskyAG2013}
+}
+
+
+\frame{
+  \frametitle{Journals-clones}
+
+Hijacked journals
+
+\vspace{5mm}
+
+Анна Абалкина: Мошеннические сайты, которые используют название, ISSN и другие метаданные оригинальных журналов для обмана потенциальных авторов.
+
+\href{https://trv-science.ru/2021/06/ostorozhno-zhurnaly-klony/}{https://trv-science.ru/2021/06/ostorozhno-zhurnaly-klony/} 
+
+}
+
+
+\frame{
+  \frametitle{Translated articles}
+
+\href{https://www.mv.helsinki.fi/home/kopotev/Kutuzov\_etc\_clustering-comparable-corpora\_2016.pdf}{https://www.mv.helsinki.fi/home/kopotev/Kutuzov\_etc\_clustering-comparable-corpora\_2016.pdf}
+
+\href{https://www.dissernet.org/publications/svoboda\_perevodnoy\_plagiat.htm}{https://www.dissernet.org/publications/svoboda\_perevodnoy\_plagiat.htm}
+
+\href{http://wiki.dissernet.org/wsave/IJICC\_2019\_10\_1publ.html}{http://wiki.dissernet.org/wsave/IJICC\_2019\_10\_1publ.html}
+
+\href{http://rosvuz.dissernet.org/person/111797}{http://rosvuz.dissernet.org/person/111797}
+
+}
+
+
+\frame {
+  \frametitle{Additional}
+  \href{https://ru.wikipedia.org/wiki/\%D0\%9A\%D0\%BE\%D0\%BC\%D0\%B8\%D1\%81\%D1\%81\%D0\%B8\%D1\%8F\_\%D0\%BF\%D0\%BE\_\%D0\%B1\%D0\%BE\%D1\%80\%D1\%8C\%D0\%B1\%D0\%B5\_\%D1\%81\_\%D0\%BB\%D0\%B6\%D0\%B5\%D0\%BD\%D0\%B0\%D1\%83\%D0\%BA\%D0\%BE\%D0\%B9}{https://ru.wikipedia.org/wiki/Комиссия\_по\_борьбе\_с\_лженаукой}
+
+  \href{https://ru.wikipedia.org/wiki/\%D0\%9A\%D0\%BE\%D0\%BC\%D0\%B8\%D1\%81\%D1\%81\%D0\%B8\%D1\%8F\_\%D0\%BF\%D0\%BE\_\%D0\%BF\%D1\%80\%D0\%BE\%D1\%82\%D0\%B8\%D0\%B2\%D0\%BE\%D0\%B4\%D0\%B5\%D0\%B9\%D1\%81\%D1\%82\%D0\%B2\%D0\%B8\%D1\%8E\_\%D1\%84\%D0\%B0\%D0\%BB\%D1\%8C\%D1\%81\%D0\%B8\%D1\%84\%D0\%B8\%D0\%BA\%D0\%B0\%D1\%86\%D0\%B8\%D0\%B8\_\%D0\%BD\%D0\%B0\%D1\%83\%D1\%87\%D0\%BD\%D1\%8B\%D1\%85\_\%D0\%B8\%D1\%81\%D1\%81\%D0\%BB\%D0\%B5\%D0\%B4\%D0\%BE\%D0\%B2\%D0\%B0\%D0\%BD\%D0\%B8\%D0\%B9}{https://ru.wikipedia.org/wiki/Комиссия\_по\_противодействию\_\\ фальсификации\_научных\_исследований}
+
+  Unfortunately, the academy has little influence on the state and processes.
+
+\vspace{3mm}
+
+There is no access to monographs, articles and dissertations. The current dataset is a lucky accident that in the pandemic the Russian State Library <<mistakenly>> put in open access. The list of the Ministry of Education on the existing defenses is not available. 
+
+\vspace{3mm}
+
+The supervisor after the ZOLUS loses the right to hold a position in the Dissertation Council for 5 years. 
+
+}
+
+
+
+\frame{
+  \frametitle{Results}
+
+\begin{itemize}
+  \item Text plagiarism (n-gram), dissertations, CyberLeninka.
+
+  \item Text plagiarism, conclusions
+
+  \item Tabular plagiarism, exact match, data manipulation
+
+  \item Update of sources
+
+  \item Phantoms, VIP, Fuflo-mics
+
+  \item Translated plagiarism
+\end{itemize}
+
+\pause
+
+\vspace{2mm}
+
+  On March 2021, there were 9K (for 2013-2021 years of work of Dissernet) suspicions, on August 2022 - 11.5K. The main factories were already found.
+
+\vspace{2mm}
+  2012 year covered, 1300+ potential ZOLUSes. For 2013-2021 submitted 1000+ ZOLUSes. 
+  2025 year - 2000+ ZOLUSes.
+\vspace{2mm}
+}
+
+\frame {
+  \frametitle {Links}
+
+  \href{https://www.youtube.com/watch?v=vDKQQSDDj2g}{https://www.youtube.com/watch?v=vDKQQSDDj2g, <<Диссернет. Эволюция альтруизма (научно-популярный фильм)>>}
+
+  \vspace{3mm}
+
+  \href{https://www.youtube.com/c/DissernetTV}{https://www.youtube.com/c/DissernetTV}
+
+  \vspace{3mm}
+
+  \href{https://dissernet.org/media/nmdni_2013}{https://dissernet.org/media/nmdni\_2013} НАМЕДНИ-2013
+}
+
+\frame {
+  \frametitle {Wakanda forever}
+
+\begin{itemize}
+
+  \item
+  155K dissertations, 2000 - now. Speak in their own and other languages. 
+
+  \item
+  Without public control, bad things happen.
+
+\end{itemize}
+
+}
+
+\frame {
+  \frametitle {Translated plagiarism}
+
+\begin{itemize}
+  \item
+  Model from Hugging Face (Wakanda - Rus). 
+\item
+  100 GB of text, 200 tasks/2 cpu core/1 month (Kudos to University). Dirty translation.
+\item
+  A few of N-gram are saved. Enough to detect translation.
+\item
+  The approach with embeddings is possible. Translation is required for formal detection.
+\item
+  Clean translation using OpenAI. Free credits. Kudos.
+\end{itemize}  
+}
+
+\frame {
+  \frametitle {Results}  
+
+\begin{itemize}
+
+  \item About 9K internal (Wakanda-Wakanda) copying.
+
+  \item 5K translations. 50-100 in the opposite direction.
+
+  \item Rectors 250:45.
+  
+\end{itemize}
+
+}
+
+\frame {
+  \frametitle{}
+
+  \begin{figure}
+  \includegraphics[height=0.6\textwidth]{wakanda_tr.jpg}
+\end{figure}
+}
+
+
+
+\frame {
+  \frametitle {AI-detected}
+
+\begin{itemize}
+
+  \item Simple classifiers can determine. 1-, 2-, 3-ngram. 
+\href{https://x.com/hippopedoid/status/1804057603628012001}{https://x.com/hippopedoid/status/1804057603628012001} Dmitry Kobak 
+  
+  \item The presence of AI does not mean plagiarism or evil deeds.
+
+  \item Moral aspects.
+  
+\end{itemize}
+
+
+  \begin{figure}
+  \includegraphics[height=0.3\textwidth]{kobak.jpg}
+\end{figure}
+
+}
+
+
+
+
+
+\frame {
+  \frametitle{What's next?}
+
+  Legal decisions? 
+
+  \href{https://dissernet.org/expertise/DudarNN2004}{https://dissernet.org/expertise/DudarNN2004}
+
+  \pause 
+
+  There is a dataset. Understandable. Numerical data. Other countries.
+
+\vspace{3mm}
+
+  Ideas?  
+}
+
+
+
+
+
+\frame {
+  \frametitle{}
+
+  \begin{figure}
+  \includegraphics[height=0.6\textwidth]{rostovcev_window.jpg}
+\end{figure}
+}
+
+\frame{
+  \frametitle{Pressure}
+
+  \begin{table}
+    \centering
+    \begin{tabular}{c c}
+      \includegraphics[width=0.5\textwidth]{andrew_z.jpg} & 
+      \pause 
+      \includegraphics[width=0.5\textwidth]{andrew_after.jpg} \\
+    \end{tabular}
+  \end{table}
+}
+
+\frame {
+  \frametitle{}
+
+  \begin{figure}
+  \includegraphics[height=0.5\textwidth]{ippi.jpg}
+\end{figure}
+}
+
+
+\frame {
+  \frametitle {To the good things}
+
+\begin{itemize}
+
+\item The data can be used differently. For example, to accelerate progress.
+
+\item Open science.
+
+\item  Future House.
+
+\end{itemize}
+
+}
+
+
+\frame {
+  \frametitle {To the good things}
+
+\begin{itemize}
+
+\item RAG on 100M documents? 
+
+\item Current systems work on 50-200K documents. (Writer.com, hackatons)
+
+\pause
+
+\item Only oncology has 1M-3M articles in medicine and related fields, about 40K articles per year on cancer (2025).
+
+\item Does the acupuncture help? Is coffee harmful? How to fit 1M documents into the context of LLM? 
+
+\pause
+
+\item Metadata
+
+\end{itemize}
+}
+
+\frame {
+  \frametitle {To the good things}
+
+\begin{itemize}
+
+\item Embeddings - resources are needed. The dataset is too large.
+
+\item Embeddings takes more space than text. KNN. 5-10B vectors.
+
+\end{itemize}
+}
+
+
+
+
+\frame {
+  \frametitle{}
+
+  \begin{figure}
+  \includegraphics[height=0.6\textwidth]{diss_astro.jpg}
+\end{figure}
+}
+
+
+
+
+
+\end{document}
